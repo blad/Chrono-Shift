@@ -11,22 +11,21 @@ namespace CS113_Game
 {
     public class StartScreen : Screen
     {
-        ArrayList buttons;
-        Button start_Button;
-        ContentManager game_Content;
-        Game1 gameRef;
+        private ArrayList buttons;
+        private Button start_Button;
+        private Game1 gameRef;
+        private Texture2D background;
+        private Rectangle background_Rect;
 
-        public StartScreen(Game1 game, ContentManager content)
+        public StartScreen(Game1 game)
         {
             gameRef = game;
-            game_Content = content;
             buttons = new ArrayList();
 
-            Texture2D buttonTexture = game_Content.Load<Texture2D>("Sprites/Buttons/TestStartButton");
+            background = Game1.content_Manager.Load<Texture2D>("Backgrounds/Menus/TitleScreen");
+            background_Rect = new Rectangle(0, 0, background.Width, background.Height);
 
-            start_Button = new Button(buttonTexture, 
-                                        GraphicsDeviceManager.DefaultBackBufferWidth/2 - buttonTexture.Width/2,
-                                        GraphicsDeviceManager.DefaultBackBufferHeight/2 - buttonTexture.Height/2);
+            start_Button = new Button(470, 550, 290, 50);
             buttons.Add(start_Button);
         }
 
@@ -34,12 +33,14 @@ namespace CS113_Game
         {
             if (start_Button.buttonPressed(handler))
             {
-                Game1.addScreenToStack(new GameScreen(gameRef, game_Content));
+                Game1.addScreenToStack(new LevelSelectScreen(gameRef));
             }
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
+            spriteBatch.Draw( background, background_Rect, Color.White);
+
             foreach (Button button in buttons)
             {
                 button.Draw(spriteBatch);

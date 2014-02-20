@@ -17,8 +17,6 @@ namespace CS113_Game
             character_Texture = characterTexture;
             position = new Vector2(400.0f, 400.0f);
 
-            character_Rect = new Rectangle((int)position.X, (int)position.Y, character_Texture.Width, character_Texture.Height);
-
             equipped_Weapon = new AssaultRifle(game, position);
         }
     }

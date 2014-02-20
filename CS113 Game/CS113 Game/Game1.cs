@@ -19,8 +19,8 @@ namespace CS113_Game
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        private const int screen_Width = 800;
-        private const int screen_Height = 600;
+        public static int screen_Width = 1200;
+        public static int screen_Height = 800;
 
         private static Stack<Screen> screen_Stack;
         private static Screen current_Screen;
@@ -41,7 +41,7 @@ namespace CS113_Game
             cam.position = new Vector2((float)-screen_Width / 2, (float)-screen_Height / 2);
 
             screen_Stack = new Stack<Screen>();
-            input_Handler = new InputHandler();
+            input_Handler = new InputHandler(PlayerIndex.One);
 
             IsMouseVisible = true;
         }
@@ -70,7 +70,7 @@ namespace CS113_Game
 
             // TODO: use this.Content to load your game content here
             content_Manager = Content;
-            addScreenToStack(new StartScreen(this, Content));
+            addScreenToStack(new StartScreen(this));
 
         }
 
@@ -94,7 +94,7 @@ namespace CS113_Game
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            input_Handler.Update(gameTime);
+            input_Handler.Update(gameTime, PlayerIndex.One);
 
             current_Screen.Update(gameTime, input_Handler);
 

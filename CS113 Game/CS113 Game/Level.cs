@@ -12,6 +12,11 @@ namespace CS113_Game
 {
     public abstract class Level : DrawableGameComponent
     {
+        private HUDManager HUD;
+        private Texture2D reticle;
+        private Rectangle reticle_Rect;
+        private int distance_From_Camera = 250;
+
         protected Texture2D level_Texture;
         protected Texture2D ground_Texture;
         protected Texture2D platform_Texture;
@@ -19,32 +24,53 @@ namespace CS113_Game
         protected Rectangle ground_Rect;
         protected SpriteBatch spriteBatch;
         protected ArrayList platformList;
+        protected ArrayList spawners;
         protected Game1 gameRef;
-        
-        private int distance_From_Camera = 200;
 
         public static MainCharacter current_Character;
-        public static ArrayList enemyList;
         public static ArrayList characterList;
+        public static ArrayList enemyList;
         public static int screen_Offset = 0;
 
 
-        public Level(Game game)
+        public Level(Game1 game)
             : base(game)
         {
+            
+            gameRef = game;
+            gameRef.IsMouseVisible = false;
             DrawOrder = 50;
+
+            HUD = new HUDManager();
+
+            reticle = Game1.content_Manager.Load<Texture2D>("Sprites/Projectiles/Reticle");
+            reticle_Rect = new Rectangle(0, 0, reticle.Width, reticle.Height);
+
             platformList = new ArrayList();
             characterList = new ArrayList();
             enemyList = new ArrayList();
+            spawners = new ArrayList();
+
+
+            Texture2D characterTexture = Game1.content_Manager.Load<Texture2D>("Sprites/Characters/AkiraSpriteSheet");
+
+            current_Character = new MainCharacter(game, characterTexture);
+            characterList.Add(current_Character);
+
         }
 
         public void Update(GameTime gameTime, InputHandler handler)
         {
-            current_Character.Update(gameTime, handler, screen_Offset);
-            //Rectangle characterRect = current_Character.getCharacterRect();
+            Point mousePosition = handler.mousePosition();
 
-            foreach (Enemy enemy in enemyList)
-                enemy.Update();
+            reticle_Rect.X = screen_Offset + mousePosition.X - reticle.Width/2;
+            reticle_Rect.Y = mousePosition.Y - reticle.Height/2;
+
+
+            current_Character.Update(gameTime, handler);
+            
+            foreach (Spawner spawner in spawners)
+                spawner.Update(gameTime);
 
             foreach (Character character in characterList)
             {
@@ -55,7 +81,7 @@ namespace CS113_Game
                     && !character.jumping
                     && !character.grounded)
                 {
-                    character.ground(ground_Rect.Y + ground_Rect.Height / 3);
+                    character.ground(ground_Rect.Y + ground_Rect.Height / 2);
                     character.standing_Platform = ground_Rect;
                 }
 
@@ -75,28 +101,33 @@ namespace CS113_Game
             }
 
             //if the character is past a certain point on the camera's view, move the camera at the same speed the character moves
-            if (current_Character.getPosition().X > (-Game1.cam.position.X + GraphicsDeviceManager.DefaultBackBufferWidth / 2 - distance_From_Camera))
+            if (current_Character.getPosition().X > (-Game1.cam.position.X + Game1.screen_Width / 2 - distance_From_Camera))
             {
                 Game1.cam.Move(new Vector2(-(float)current_Character.getSpeed(), 0.0f));
                 screen_Offset += current_Character.getSpeed();
+                HUD.translateHUD(current_Character.getSpeed());
             }
 
-            else if (screen_Offset > 0 && current_Character.getPosition().X < (-Game1.cam.position.X - GraphicsDeviceManager.DefaultBackBufferWidth / 2 + distance_From_Camera))
+            else if (screen_Offset > 0 && current_Character.getPosition().X < (-Game1.cam.position.X - Game1.screen_Width / 2 + distance_From_Camera))
             {
                 Game1.cam.Move(new Vector2((float)current_Character.getSpeed(), 0.0f));
                 screen_Offset -= current_Character.getSpeed();
+                HUD.translateHUD(-current_Character.getSpeed());
             }
         }
 
         public override void Draw(GameTime gameTime)
         {
+            //everything is drawn in a layer going down
+            // Everything drawn first is in the backmost layer
+
             spriteBatch.Begin(SpriteSortMode.Deferred, 
                                 BlendState.AlphaBlend, 
                                 null, null, null, null, 
                                 Game1.cam.getTransformation(gameRef.GraphicsDevice));
            
             spriteBatch.Draw(level_Texture, level_Rect, Color.White);
-            spriteBatch.Draw(ground_Texture, ground_Rect, Color.White);
+            //spriteBatch.Draw(ground_Texture, ground_Rect, Color.White);
 
             foreach (Rectangle rect in platformList)
             {
@@ -104,11 +135,16 @@ namespace CS113_Game
             }
 
             current_Character.Draw(gameTime, spriteBatch);
+
             foreach (Enemy enemy in enemyList)
             {
                 enemy.Draw(gameTime, spriteBatch);
             }
 
+
+            HUD.Draw(spriteBatch);
+
+            spriteBatch.Draw(reticle, reticle_Rect, Color.White);
 
             spriteBatch.End();
         }

@@ -18,11 +18,10 @@ namespace CS113_Game
         //adds the InputHanlder to the class
         //creates a list of characters
         //adds a level and ground platform texture
-        public GameScreen(Game1 game, ContentManager content)
+        public GameScreen(Game1 game, Level level)
         {
             gameRef = game;
-
-            current_Level = new AncientEgyptLevel(gameRef);
+            current_Level = level;
             
         }
 

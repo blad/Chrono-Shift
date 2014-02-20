@@ -14,15 +14,20 @@ namespace CS113_Game
         protected Vector2 previousPosition;
         protected Rectangle character_Rect;
         protected Texture2D character_Texture;
-        protected int movement_Speed = 3;
+        protected enum direction { left, right };
+        protected Color color_Tint;
+        protected int movement_Speed;
         protected int gravity = 1;
-        protected int jump_Speed = 20;
-
+        protected int jump_Speed = 30;
+        protected int texture_Offset;
+        
         public Vector2 position;
         public Rectangle standing_Platform;
+        public int health;
         public bool grounded = false;
         public bool jumping = false;
         public bool falling = false;
+
 
 
         public Character(Game game)
@@ -31,6 +36,7 @@ namespace CS113_Game
 
         }
 
+        //every character in the game should be affected by gravity
         public void activeGravity()
         {
             if (!grounded)
@@ -49,13 +55,32 @@ namespace CS113_Game
             //if we are not longer on the platform then we should fall
             if (standing_Platform != null && ((position.X + character_Rect.Width < standing_Platform.X)
                                                 || (position.X > standing_Platform.X + standing_Platform.Width)
-                                                && !falling))
+                                                && !falling
+                                                && !jumping))
             {
-                Console.WriteLine("we should be falling");
                 grounded = false;
                 falling = true;
             }
         }
+
+        
+        //methods that affect the character
+        public void moveLeft()
+        {
+            position.X = position.X - movement_Speed;
+        }
+
+        public void moveRight()
+        {
+            position.X = position.X + movement_Speed;
+        }
+
+        public void takeDamage(int damage)
+        {
+            health = health - damage;
+            color_Tint = Color.Red;
+        }
+
 
 
         //get methods
@@ -87,7 +112,7 @@ namespace CS113_Game
             jumping = false;
             falling = false;
             jump_Speed = 0;
-            position.Y = positionY - character_Texture.Height;
+            position.Y = positionY - texture_Offset;
         }
 
         public abstract void Draw(GameTime gameTime, SpriteBatch spriteBatch);

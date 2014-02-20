@@ -114,11 +114,15 @@
     <Compile Include="Camera2D.cs" />
     <Compile Include="Character.cs" />
     <Compile Include="Enemy.cs" />
+    <Compile Include="Gun.cs" />
+    <Compile Include="HUDManager.cs" />
     <Compile Include="Level.cs" />
+    <Compile Include="LevelSelectScreen.cs" />
     <Compile Include="MainCharacter.cs" />
     <Compile Include="PlayableCharacter.cs" />
     <Compile Include="GameScreen.cs" />
     <Compile Include="InputHandler.cs" />
+    <Compile Include="PrehistoricLevel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />

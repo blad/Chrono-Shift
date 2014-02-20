@@ -17,8 +17,10 @@ namespace CS113_Game
         private static KeyboardState previous_Keyboard_State;
         private static MouseState current_Mouse_State;
         private static MouseState previous_Mouse_State;
+        private static GamePadState current_GamePad_State;
+        private static GamePadState previous_GamePad_State;
 
-        //get and set methods
+        //get methods
         public static KeyboardState Current_Keyboard_State()
         {
             return current_Keyboard_State;
@@ -39,19 +41,33 @@ namespace CS113_Game
             return previous_Mouse_State;
         }
 
+        public static GamePadState Previous_GamePad_State()
+        {
+            return previous_GamePad_State;
+        }
+
+        public static GamePadState Current_GamePad_State()
+        {
+            return current_GamePad_State;
+        }
         //constructor
-        void InputHanlder()
+        public InputHandler(PlayerIndex index)
         {
             current_Keyboard_State = Keyboard.GetState();
             current_Mouse_State = Mouse.GetState();
+            current_GamePad_State = GamePad.GetState(index);
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, PlayerIndex index)
         {
             previous_Keyboard_State = current_Keyboard_State;
             current_Keyboard_State = Keyboard.GetState();
+
             previous_Mouse_State = current_Mouse_State;
             current_Mouse_State = Mouse.GetState();
+
+            previous_GamePad_State = current_GamePad_State;
+            current_GamePad_State = GamePad.GetState(index);
         }
 
         public bool keyReleased(Keys key)

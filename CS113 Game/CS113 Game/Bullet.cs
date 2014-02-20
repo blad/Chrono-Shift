@@ -17,27 +17,42 @@ namespace CS113_Game
         private Rectangle sprite_Rect;
         private Vector2 origin;
         private Vector2 direction;
-        private AssaultRifle originWeapon;
+        private Gun source_Weapon;
         private float angle;
-        private int damage = 10;
+        private int damage = 5;
+        private int list_Position;
 
         public Vector2 position;
         public bool inverted;
-       
+
+        public int Damage
+        {
+            get { return damage; }
+            set { damage = value; }
+        }
+
+        public Vector2 Direction
+        {
+            get { return direction; }
+            set { direction = value; }
+        }
 
 
-        public Bullet(Game game, AssaultRifle thisWeapon, Vector2 startingPosition, Vector2 direction, float theta, bool inversion)
+        public Bullet(Game game, Gun source_Weapon, Vector2 position, Vector2 direction, float theta, bool inversion, int list_Position)
             : base(game)
         {
             bullet_Texture = Game1.content_Manager.Load<Texture2D>("Sprites/Projectiles/SimpleBullet");
-            originWeapon = thisWeapon;
-            position = startingPosition;
+
+            this.source_Weapon = source_Weapon;
+            this.position = position;
+            this.list_Position = list_Position;
             this.direction = direction;
 
             angle = theta;
 
             inverted = inversion;
 
+            //must fix the hard numbers in this code, change to variables
             if (inverted)
             {
                 origin = new Vector2(10.0f, 0.0f);
@@ -53,6 +68,18 @@ namespace CS113_Game
             bullet_Rect = new Rectangle((int)position.X, (int)position.Y, bullet_Texture.Width/2, bullet_Texture.Height);
         }
 
+
+        //fill this out later
+        //this method should be different per type of bullet
+        //different bullets have different effects:
+        //pistol bullets - regular hit effect/animation
+        //lasers - penetrate enemies
+        //rockets - create explosion and splash damage
+        //etc.
+        public void onCollisionEffect()
+        {
+        }
+
         public override void Update(GameTime gameTime)
         {
             position += direction;
@@ -61,12 +88,14 @@ namespace CS113_Game
 
             foreach (Enemy enemy in Level.enemyList)
             {
-                if (bullet_Rect.Intersects(enemy.getCharacterRect()))
+                if (enemy != null)
                 {
-                    enemy.health = enemy.health - damage;
-                    //originWeapon.getBullets().Remove(this);
-                }
-                        
+                    if (bullet_Rect.Intersects(enemy.getCharacterRect()))
+                    {
+                        enemy.takeDamage(damage);
+                        source_Weapon.getBullets()[list_Position] = null;
+                    }
+                }     
             }
         }
 
