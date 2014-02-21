@@ -65,7 +65,7 @@ namespace CS113_Game
                 loadLevel();
             }
 
-            if (prehistoricButton.buttonPressed(handler))
+            else if (prehistoricButton.buttonPressed(handler))
             {
                 selected_Level = Levels.Dino;
                 loadLevel();

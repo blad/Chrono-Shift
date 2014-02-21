@@ -96,6 +96,13 @@ namespace CS113_Game
 
             input_Handler.Update(gameTime, PlayerIndex.One);
 
+            if (input_Handler.keyReleased(Keys.Escape))
+            {
+                IsMouseVisible = true;
+                popScreenStack();
+            }
+
+
             current_Screen.Update(gameTime, input_Handler);
 
             base.Update(gameTime);
@@ -127,6 +134,12 @@ namespace CS113_Game
         public static void addScreenToStack(Screen screen)
         {
             screen_Stack.Push(screen);
+            current_Screen = screen_Stack.Peek();
+        }
+
+        public static void popScreenStack()
+        {
+            screen_Stack.Pop();
             current_Screen = screen_Stack.Peek();
         }
 

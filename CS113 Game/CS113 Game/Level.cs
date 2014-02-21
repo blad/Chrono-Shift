@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Input;
 
 namespace CS113_Game
 {
@@ -15,6 +16,7 @@ namespace CS113_Game
         private HUDManager HUD;
         private Texture2D reticle;
         private Rectangle reticle_Rect;
+        private Camera2D cam;
         private int distance_From_Camera = 250;
 
         protected Texture2D level_Texture;
@@ -40,6 +42,9 @@ namespace CS113_Game
             gameRef = game;
             gameRef.IsMouseVisible = false;
             DrawOrder = 50;
+
+            cam = new Camera2D();
+            cam.position = new Vector2((float)-Game1.screen_Width / 2, (float)-Game1.screen_Height / 2);
 
             HUD = new HUDManager();
 
@@ -101,16 +106,16 @@ namespace CS113_Game
             }
 
             //if the character is past a certain point on the camera's view, move the camera at the same speed the character moves
-            if (current_Character.getPosition().X > (-Game1.cam.position.X + Game1.screen_Width / 2 - distance_From_Camera))
+            if (screen_Offset < level_Texture.Width - Game1.screen_Width && current_Character.getPosition().X > (-cam.position.X + Game1.screen_Width / 2 - distance_From_Camera))
             {
-                Game1.cam.Move(new Vector2(-(float)current_Character.getSpeed(), 0.0f));
+                cam.Move(new Vector2(-(float)current_Character.getSpeed(), 0.0f));
                 screen_Offset += current_Character.getSpeed();
                 HUD.translateHUD(current_Character.getSpeed());
             }
 
-            else if (screen_Offset > 0 && current_Character.getPosition().X < (-Game1.cam.position.X - Game1.screen_Width / 2 + distance_From_Camera))
+            else if (screen_Offset > 0 && current_Character.getPosition().X < (-cam.position.X - Game1.screen_Width / 2 + distance_From_Camera))
             {
-                Game1.cam.Move(new Vector2((float)current_Character.getSpeed(), 0.0f));
+                cam.Move(new Vector2((float)current_Character.getSpeed(), 0.0f));
                 screen_Offset -= current_Character.getSpeed();
                 HUD.translateHUD(-current_Character.getSpeed());
             }
@@ -124,7 +129,7 @@ namespace CS113_Game
             spriteBatch.Begin(SpriteSortMode.Deferred, 
                                 BlendState.AlphaBlend, 
                                 null, null, null, null, 
-                                Game1.cam.getTransformation(gameRef.GraphicsDevice));
+                                cam.getTransformation(gameRef.GraphicsDevice));
            
             spriteBatch.Draw(level_Texture, level_Rect, Color.White);
             //spriteBatch.Draw(ground_Texture, ground_Rect, Color.White);

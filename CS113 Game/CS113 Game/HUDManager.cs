@@ -31,7 +31,7 @@ namespace CS113_Game
 
         private Vector2 health_Bar_Position = new Vector2(200.0f, 25.0f);
         private Vector2 hb_Sprite_Location = new Vector2(86.0f, 0.0f);
-        private int health_Bar_Width = 191;
+        private int health_Bar_Width = 190;
         private int health_Bar_Height = 24;
 
         public HUDManager()
