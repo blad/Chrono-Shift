@@ -29,6 +29,19 @@ namespace CS113_Game
             ground_Rect = new Rectangle(0, Game1.screen_Height - ground_Texture.Height - 50,
                                             ground_Texture.Width, ground_Texture.Height);
 
+            platform_Texture = Game1.content_Manager.Load<Texture2D>("Sprites/Platforms/wood_log_platform");
+
+            platformList.Add(new Rectangle(100, 600, platform_Texture.Width, platform_Texture.Height));
+            platformList.Add(new Rectangle(500, 400, platform_Texture.Width, platform_Texture.Height));
+            platformList.Add(new Rectangle(1500, 400, platform_Texture.Width, platform_Texture.Height));
+            platformList.Add(new Rectangle(400, 600, platform_Texture.Width, platform_Texture.Height));
+            platformList.Add(new Rectangle(800, 400, platform_Texture.Width, platform_Texture.Height));
+            platformList.Add(new Rectangle(1800, 400, platform_Texture.Width, platform_Texture.Height));
+
+            Spawner spawner_1 = new Spawner(gameRef, new Vector2(2750.0f, 300.0f), Spawner.EnemyType.FireRex);
+            spawner_1.Max_Enemies = 1;
+            spawners.Add(spawner_1);
+
 
         }
     }

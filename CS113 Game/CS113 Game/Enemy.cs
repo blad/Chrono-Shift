@@ -10,57 +10,95 @@ using Microsoft.Xna.Framework.Input;
 
 namespace CS113_Game
 {
-    public class Enemy : Character
+    public abstract class Enemy : Character
     {
-        private MainCharacter character_To_Attack = Level.current_Character;
-        private int list_Position;
+        protected MainCharacter character_To_Attack = Level.current_Character;
 
-        public Enemy(Game game, Vector2 startPosition)
+        protected int attack_Time = 200; //the amount of time we will wait to attempt an attack
+        protected int current_Attack_Time = 0; //this will be compared with attack_Time to see if enough time has passed to attack
+        protected bool attacking = false;
+        protected Spawner spawner;
+
+        protected bool has_Gravity = true;
+
+        public Enemy(Game1 game, Spawner spawner)
             : base(game)
         {
-            health = 15;
-            movement_Speed = 2;
-            position = startPosition;
-            character_Texture = Game1.content_Manager.Load<Texture2D>("Sprites/Characters/TestEnemy");
-            character_Rect = new Rectangle((int)position.X, (int)position.Y, character_Texture.Width, character_Texture.Height);
-            color_Tint = Color.White;
-
-            texture_Offset = character_Texture.Height;
+            gameRef = game;
+            this.spawner = spawner;
         }
 
-        public void AIroutine()
+        public Enemy(Game1 game)
+            : base(game)
         {
-            if (character_To_Attack.position.X > position.X)
-            {
-                moveRight();
-            }
-            else if (character_To_Attack.position.X < position.X)
-            {
-                moveLeft();
-            }
+            DrawOrder = 450;
+        }
+   
 
+        public override void Update(GameTime gameTime)
+        {
             if (health <= 0)
             {
                 Level.enemyList.Remove(this);
+                Level.characterList.Remove(this);
+
+                if (spawner != null)
+                    spawner.Enemies.Remove(this);
+                else
+                    Level.bombList.Remove(this); //only needed for bombs, this code is starting to be weird. need to revise the way bombs work
+
+
+                Random rng = new Random();
+
+                int random = rng.Next(100);
+
+                if (random < 15) //we have a 15% chance of dropping a health pack
+                    Level.itemList.Add(new HealthPack(gameRef, this.position));
+                else if (random >= 15 && random < 50)
+                    Level.itemList.Add(new WeaponPickup(gameRef, this.position, random));
             }
 
-        }
+            previous_Game_Time = current_Game_Time;
+            current_Game_Time = gameTime;
 
-        public void Update()
-        {
-            activeGravity();
-            AIroutine();
+            if (has_Gravity)
+            {
+                activeGravity();
+            }
+
+            AIroutine(gameTime);
 
             character_Rect.X = (int)position.X;
             character_Rect.Y = (int)position.Y;
+
+            if (currentEffect == Effect.FIRE)
+            {
+                takeFireDOT(gameTime);
+            }
+
+            if (has_Weapon)
+            {
+                equipped_Weapon.changePosition(position);
+                equipped_Weapon.Update(gameTime);
+            }
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            if (Visible)
-                spriteBatch.Draw(character_Texture, character_Rect, color_Tint);
+            spriteBatch.Draw(character_Texture, character_Rect, sprite_Rect, color_Tint, 0.0f, origin, SpriteEffects.None, 1.0f);
 
-            color_Tint = Color.White;
+            if (has_Weapon)
+            {
+                equipped_Weapon.Draw(spriteBatch);
+            }
+
+            if (!effect_Active)
+                color_Tint = Color.White;
         }
+
+        //Abstract methods that every enemy must have
+        public abstract void Attack();
+        public abstract void AIroutine(GameTime gameTime);
+    
     }
 }

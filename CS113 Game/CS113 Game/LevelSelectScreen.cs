@@ -21,6 +21,12 @@ namespace CS113_Game
 
         private Button egyptButton;
         private Button prehistoricButton;
+        private Button WWIIButton;
+
+        private int ButtonWidth = 145;
+        private int ButtonHeight = 195;
+
+        public static LinkedList<Gem> characterGems = new LinkedList<Gem>();
 
         Game1 gameRef;
 
@@ -28,16 +34,21 @@ namespace CS113_Game
         {
             gameRef = game;
 
-            background = Game1.content_Manager.Load<Texture2D>("Backgrounds/Menus/LevelSelectTemp");
+            characterGems.AddLast(new TimeGem());
+
+            background = Game1.content_Manager.Load<Texture2D>("Backgrounds/Menus/stage_select_bg");
             background_Rect = new Rectangle(0, 0, background.Width, background.Height);
 
             buttons = new ArrayList();
 
-            egyptButton = new Button(35, 320, 150, 150);
+            egyptButton = new Button(85, 95, ButtonWidth, ButtonHeight);
             buttons.Add(egyptButton);
 
-            prehistoricButton = new Button(305, 195, 150, 150);
+            prehistoricButton = new Button(295, 440, ButtonWidth, ButtonHeight);
             buttons.Add(prehistoricButton);
+
+            WWIIButton = new Button(745, 440, ButtonWidth, ButtonHeight);
+            buttons.Add(WWIIButton);
         }
 
 
@@ -52,13 +63,17 @@ namespace CS113_Game
                 case Levels.Dino :
                     Game1.addScreenToStack(new GameScreen(gameRef, new PrehistoricLevel(gameRef)));
                     break;
-
+                case Levels.WWII :
+                    Game1.addScreenToStack(new GameScreen(gameRef, new WWIILevel(gameRef)));
+                    break;
             }
 
         }
 
         public override void Update(GameTime gameTime, InputHandler handler)
         {
+            gameRef.IsMouseVisible = true;
+
             if (egyptButton.buttonPressed(handler))
             {
                 selected_Level = Levels.Egypt;
@@ -68,6 +83,11 @@ namespace CS113_Game
             else if (prehistoricButton.buttonPressed(handler))
             {
                 selected_Level = Levels.Dino;
+                loadLevel();
+            }
+            else if (WWIIButton.buttonPressed(handler))
+            {
+                selected_Level = Levels.WWII;
                 loadLevel();
             }
         }

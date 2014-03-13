@@ -5,25 +5,36 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Input;
 
 namespace CS113_Game
 {
-    public class Bullet : DrawableGameComponent
+    public abstract class Bullet : DrawableGameComponent
     {
-        private Texture2D bullet_Texture;
+        protected Texture2D bullet_Texture;
 
-        private Rectangle bullet_Rect;
-        private Rectangle sprite_Rect;
-        private Vector2 origin;
-        private Vector2 direction;
-        private Gun source_Weapon;
-        private float angle;
-        private int damage = 5;
-        private int list_Position;
+        protected Rectangle bullet_Rect;
+        protected Rectangle sprite_Rect;
+        protected Vector2 origin;
+        protected Vector2 direction;
+        protected Gun source_Weapon;
+        protected Color bullet_Color;
+        protected Character.Effect bullet_Effect;
+
+        protected int image_Location;
+
+        //we need to know if this bullet was fired by an enemy
+        //if it was then the bullet needs to do damage to the player and not other enemies
+        protected bool player_Target;
+
+
+        protected float angle;
+        protected int damage;
+        protected int list_Position;
+
 
         public Vector2 position;
         public bool inverted;
+
 
         public int Damage
         {
@@ -38,34 +49,48 @@ namespace CS113_Game
         }
 
 
-        public Bullet(Game game, Gun source_Weapon, Vector2 position, Vector2 direction, float theta, bool inversion, int list_Position)
+        public Bullet(Game game, Gun source_Weapon, bool target, Vector2 position,
+                        Vector2 direction, float theta, bool inversion,
+                        int list_Position, Character.Effect effect)
             : base(game)
         {
-            bullet_Texture = Game1.content_Manager.Load<Texture2D>("Sprites/Projectiles/SimpleBullet");
 
             this.source_Weapon = source_Weapon;
             this.position = position;
             this.list_Position = list_Position;
             this.direction = direction;
 
+            player_Target = target;
+
             angle = theta;
 
             inverted = inversion;
 
-            //must fix the hard numbers in this code, change to variables
-            if (inverted)
-            {
-                origin = new Vector2(10.0f, 0.0f);
-                sprite_Rect = new Rectangle(10, 0, bullet_Texture.Width/2, bullet_Texture.Height);
-            }
-            else
-            {
-                origin = Vector2.Zero;
-                sprite_Rect = new Rectangle(0, 0, bullet_Texture.Width / 2, bullet_Texture.Height);
-            }
-                
+            bullet_Effect = effect;
 
-            bullet_Rect = new Rectangle((int)position.X, (int)position.Y, bullet_Texture.Width/2, bullet_Texture.Height);
+            DrawOrder = 350;
+
+            //depending on what the fired effect was, we will adjust the properties of the bullet
+            switch (bullet_Effect)
+            {
+                case (Character.Effect.NORMAL):
+                    bullet_Color = Color.White;
+                    break;
+
+                case (Character.Effect.SPEED):
+                    bullet_Color = Color.White;
+                    break;
+
+                case (Character.Effect.FIRE):
+                    bullet_Color = Color.Red;
+                    break;
+
+                case (Character.Effect.ICE):
+                    bullet_Color = Color.DarkCyan;
+                    break;
+
+            }
+
         }
 
 
@@ -76,32 +101,45 @@ namespace CS113_Game
         //lasers - penetrate enemies
         //rockets - create explosion and splash damage
         //etc.
-        public void onCollisionEffect()
-        {
-        }
+       
 
+        //this will need to be adjusted based on whether or not the bullet hits and enemy or character
         public override void Update(GameTime gameTime)
         {
             position += direction;
             bullet_Rect.X = (int)position.X;
             bullet_Rect.Y = (int)position.Y;
 
-            foreach (Enemy enemy in Level.enemyList)
+            if (!player_Target)
             {
-                if (enemy != null)
+                foreach (Enemy enemy in Level.enemyList)
                 {
-                    if (bullet_Rect.Intersects(enemy.getCharacterRect()))
+                    if (enemy != null)
                     {
-                        enemy.takeDamage(damage);
-                        source_Weapon.getBullets()[list_Position] = null;
+                        if (bullet_Rect.Intersects(enemy.getCharacterRect()) && bullet_Rect.Center.X > enemy.getCharacterRect().Center.X - 50 
+                                                                           && bullet_Rect.Center.X < enemy.getCharacterRect().Center.X + 50 )
+                        {
+                            onCollisionEffect(enemy);
+                        }
                     }
-                }     
+                }
+            }
+            else
+            {
+                if (bullet_Rect.Intersects(Level.current_Character.getCharacterRect()))
+                {
+                    Level.current_Character.takeDamage(damage);
+                    source_Weapon.getBullets()[list_Position] = null;
+                }
             }
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(bullet_Texture, bullet_Rect, sprite_Rect, Color.White, angle, origin , SpriteEffects.None, 1.0f);
+            spriteBatch.Draw(bullet_Texture, bullet_Rect, sprite_Rect, bullet_Color, angle, origin, SpriteEffects.None, 1.0f);
         }
+
+        public abstract void onCollisionEffect(Enemy enemy);
+          
     }
 }

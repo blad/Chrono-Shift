@@ -19,6 +19,7 @@ namespace CS113_Game
         private static MouseState previous_Mouse_State;
         private static GamePadState current_GamePad_State;
         private static GamePadState previous_GamePad_State;
+        private PlayerIndex index;
 
         //get methods
         public static KeyboardState Current_Keyboard_State()
@@ -56,9 +57,10 @@ namespace CS113_Game
             current_Keyboard_State = Keyboard.GetState();
             current_Mouse_State = Mouse.GetState();
             current_GamePad_State = GamePad.GetState(index);
+            this.index = index;
         }
 
-        public void Update(GameTime gameTime, PlayerIndex index)
+        public void Update(GameTime gameTime)
         {
             previous_Keyboard_State = current_Keyboard_State;
             current_Keyboard_State = Keyboard.GetState();
@@ -78,6 +80,16 @@ namespace CS113_Game
         public bool keyPressed(Keys key)
         {
             return (previous_Keyboard_State.IsKeyUp(key) && current_Keyboard_State.IsKeyDown(key));
+        }
+
+        public bool buttonReleased(Buttons button)
+        {
+            return (previous_GamePad_State.IsButtonDown(button) && current_GamePad_State.IsButtonUp(button));
+        }
+
+        public bool buttonPressed(Buttons button)
+        {
+            return (previous_GamePad_State.IsButtonUp(button) && current_GamePad_State.IsButtonDown(button));
         }
 
         public Point mousePosition()

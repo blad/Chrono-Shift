@@ -22,22 +22,30 @@ namespace CS113_Game
         protected int max_Bullets_To_Draw = 75;
         protected int bulletsFired = 0;
         protected float theta;
+        protected float volume;
 
-        public int texture_Offset = 60;
+        protected enum BulletType { RIFLE, PISTOL, LASER }
+        protected BulletType bulletType;
 
         Game1 gameRef;
 
-        public Gun(Game1 game)
-            : base(game)
+        public Gun(Game1 game, Character character, bool target, Vector2 position)
+            : base(game, character, target)
         {
+            this.position = position;
+            theta = 0.0f;
+            bullet_List = new Bullet[max_Bullets_To_Draw];
+            startPosition = Vector2.Zero;
 
             gameRef = game;
+
+            current_Time = Game1.currentGameTime;
         }
 
         //when we fire we need the location of the mouse pointer to find the angle at whcih we shoot
         //and an offset so that the point is relative to the position of the mouse in the game space and not the screen
-        //our shooting will be limited to the 
-        public override void fire(Point mousePoint, int offset)
+        //this is the fire method that players use
+        public override void fire(Point mousePoint)
         {
             time_Passed += current_Time.ElapsedGameTime.Milliseconds;
 
@@ -45,23 +53,51 @@ namespace CS113_Game
             {
                 time_Passed = 0;
 
-                weapon_Sound.Play();
+                SoundEffectInstance instance = weapon_Sound.CreateInstance();
+                instance.Volume = volume;
+                instance.Play();
                 //find the correct X and Y components based on the angle at which we are aiming
                 float ySpeed = bullet_Speed * (float)Math.Sin(theta);
                 float xSpeed = bullet_Speed * (float)Math.Cos(theta);
 
                 bool invert = false;
 
+
                 //the 45 here may change
-                if (mousePoint.X + offset < position.X + 45)
+                if (mousePoint.X + Level.screen_Offset < startPosition.X + 45)
                 {
                     xSpeed = -xSpeed;
                     theta = -theta;
                     invert = true;
                 }
 
+                
+
                 //create a new bullet with this weapon passed as its parent weapon
-                Bullet bullet = new Bullet(gameRef, this, startPosition, new Vector2(xSpeed, ySpeed), theta, invert, bulletsFired);
+                Bullet bullet;
+
+
+                switch (bulletType)
+                {
+                    case (BulletType.RIFLE):
+                        bullet = new AssaultBullet(gameRef, this, player_Target, startPosition,
+                                            new Vector2(xSpeed, ySpeed),
+                                            theta, invert, bulletsFired, source_Character.weaponEffect);
+                        break;
+
+                    case (BulletType.LASER):
+                        bullet = new LaserBullet(gameRef, this, player_Target, startPosition,
+                                             new Vector2(xSpeed, ySpeed),
+                                             theta, invert, bulletsFired, source_Character.weaponEffect);
+                        break;
+
+                    default:
+                        bullet = new AssaultBullet(gameRef, this, player_Target, startPosition,
+                                            new Vector2(xSpeed, ySpeed),
+                                            theta, invert, bulletsFired, source_Character.weaponEffect);
+                        break;
+
+                }
 
                 bullet_List[bulletsFired] = bullet;
                 bulletsFired++;
@@ -70,27 +106,149 @@ namespace CS113_Game
                 {
                     bulletsFired = 0;
                 }
+
+                if (source_Character.weaponEffect != Character.Effect.NORMAL)
+                {
+                    source_Character.Power -= source_Character.CurrentGem.Cost;
+                    Level.HUD.shortenPowerBar(source_Character.Power);
+                }
+
+                HUDManager.AmmoWord = Level.text_Editor.updateWord(HUDManager.AmmoWord, (--ammo).ToString());
+            }
+        }
+
+        //this is the fire method for enemies
+        public override void fire()
+        {
+            time_Passed += current_Time.ElapsedGameTime.Milliseconds;
+
+            if (time_Passed - current_Time.ElapsedGameTime.Milliseconds >= attack_Speed || fireType == FireType.SingleShot)
+            {
+                time_Passed = 0;
+
+                SoundEffectInstance instance = weapon_Sound.CreateInstance();
+                instance.Volume = volume;
+                instance.Play();
+                //find the correct X and Y components based on the angle at which we are aiming
+                float ySpeed = bullet_Speed * (float)Math.Sin(theta);
+                float xSpeed = bullet_Speed * (float)Math.Cos(theta);
+
+                bool invert = false;
+
+                //the 45 here may change
+                if (Level.current_Character.position.X < position.X + 45)
+                {
+                    xSpeed = -xSpeed;
+                    theta = -theta;
+                    invert = true;
+                }
+
+                //create a new bullet with this weapon passed as its parent weapon
+                Bullet bullet;
+
+
+                //create a new bullet with this weapon passed as its parent weapon
+                switch (bulletType)
+                {
+                    case (BulletType.RIFLE):
+                        bullet = new AssaultBullet(gameRef, this, player_Target, startPosition,
+                                            new Vector2(xSpeed, ySpeed),
+                                            theta, invert, bulletsFired, source_Character.weaponEffect);
+                        break;
+
+                    case (BulletType.LASER):
+                        bullet = new LaserBullet(gameRef, this, player_Target, startPosition,
+                                             new Vector2(xSpeed, ySpeed),
+                                             theta, invert, bulletsFired, source_Character.weaponEffect);
+                        break;
+
+                    default:
+                        bullet = new AssaultBullet(gameRef, this, player_Target, startPosition,
+                                            new Vector2(xSpeed, ySpeed),
+                                            theta, invert, bulletsFired, source_Character.weaponEffect);
+                        break;
+
+                }
+
+                bullet_List[bulletsFired] = bullet;
+                bulletsFired++;
+
+                if (bulletsFired >= max_Bullets_To_Draw)
+                {
+                    bulletsFired = 0;
+                }
+
+                ammo--;
             }
         }
 
 
         //when we fire the weapon, we need a point plus the screen offset to know where we clicked in the gamespace
+        //this update will be used only for playable characters
         public override void Update(GameTime gameTime, InputHandler handler)
         {
             current_Time = gameTime;
 
-            startPosition = position + (new Vector2((float)weapon_Texture.Width - 15, texture_Offset));
+            startPosition = position;// +(new Vector2((float)weapon_Texture.Width / 2 - 15, texture_Offset));
+            startPosition.Y += texture_Offset;
+            
 
             //find where the mouse is based on the gamespace and find the angle at which we are aiming
             Point mousePoint = handler.mousePosition();
 
+            //this changest the characters direction based on where the player is aiming
+            if (mousePoint.X + Level.screen_Offset < source_Character.position.X + source_Character.getCharacterRect().Width / 2)
+            {
+                source_Character.facing = Character.direction.left;
+                sprite_Rect.X = left_Sprite_Position;
+                startPosition.X += 50;
+            }
+            else
+            {
+                source_Character.facing = Character.direction.right;
+                sprite_Rect.X = 0;
+                startPosition.X += 50;
+            }
+
+
             int distanceX = mousePoint.X + Level.screen_Offset - (int)startPosition.X;
             int distanceY = mousePoint.Y - (int)startPosition.Y;
+
 
             float hypotnuse = (float)Math.Sqrt(distanceX * distanceX + distanceY * distanceY);
 
             theta = (float)Math.Asin(distanceY / hypotnuse);
 
+            weapon_Rect.X = (int)position.X;
+            weapon_Rect.Y = (int)position.Y + texture_Offset;
+
+            foreach (Bullet b in bullet_List)
+            {
+                if (b != null)
+                    b.Update(gameTime);
+            }
+
+            if (ammo <= 0)
+            {
+                source_Character.switchWeapon(new Pistol(gameRef, source_Character, false, source_Character.position));
+            }
+        }
+
+
+        public override void Update(GameTime gameTime)
+        {
+            current_Time = gameTime;
+
+            startPosition = position;// +(new Vector2((float)weapon_Texture.Width / 2 - 15, texture_Offset));
+            startPosition.Y += texture_Offset;
+
+            //we will point at the character, not the position of the mouse
+            int distanceX = (int)Level.current_Character.getCharacterRect().Center.X - (int)startPosition.X;
+            int distanceY = (int)Level.current_Character.getCharacterRect().Center.Y - (int)startPosition.Y;
+
+            float hypotnuse = (float)Math.Sqrt(distanceX * distanceX + distanceY * distanceY);
+
+            theta = (float)Math.Asin(distanceY / hypotnuse);
 
             weapon_Rect.X = (int)position.X;
             weapon_Rect.Y = (int)position.Y + texture_Offset;
@@ -105,7 +263,20 @@ namespace CS113_Game
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(weapon_Texture, weapon_Rect, null, Color.White, theta, Vector2.Zero, SpriteEffects.None, 1.0f);
+
+            float weaponAngle = theta;
+
+            if (source_Character.facing == Character.direction.left)
+            {
+                weaponAngle = -theta;
+                sprite_Rect.X = left_Sprite_Position;
+            }
+            else
+                sprite_Rect.X = 0;
+
+            weapon_Rect.X += 50;
+            spriteBatch.Draw(weapon_Texture, weapon_Rect, sprite_Rect, Color.White, MathHelper.PiOver4*weaponAngle, 
+                                new Vector2(sprite_Rect.Width/2, sprite_Rect.Height/2), SpriteEffects.None, 1.0f);
 
             foreach (Bullet b in bullet_List)
             {

@@ -11,13 +11,15 @@ namespace CS113_Game
 {
     public class MainCharacter : PlayableCharacter
     {
-        public MainCharacter(Game1 game, Texture2D characterTexture)
+        public MainCharacter(Game1 game, Texture2D characterTexture, Vector2 position)
             : base(game)
         {
             character_Texture = characterTexture;
-            position = new Vector2(400.0f, 400.0f);
+            this.position = position;
 
-            equipped_Weapon = new AssaultRifle(game, position);
+            equipped_Weapon = new Pistol(game, this, false, this.position);
+            has_Weapon = true;
         }
+
     }
 }

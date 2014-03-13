@@ -8,12 +8,12 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
 
 namespace CS113_Game
 {
     public abstract class Level : DrawableGameComponent
     {
-        private HUDManager HUD;
         private Texture2D reticle;
         private Rectangle reticle_Rect;
         private Camera2D cam;
@@ -23,16 +23,21 @@ namespace CS113_Game
         protected Texture2D ground_Texture;
         protected Texture2D platform_Texture;
         protected Rectangle level_Rect;
-        protected Rectangle ground_Rect;
         protected SpriteBatch spriteBatch;
         protected ArrayList platformList;
         protected ArrayList spawners;
         protected Game1 gameRef;
 
+        public static Rectangle ground_Rect;
+
+        public static HUDManager HUD;
+        public static TextEditor text_Editor;
         public static MainCharacter current_Character;
         public static ArrayList characterList;
         public static ArrayList enemyList;
-        public static int screen_Offset = 0;
+        public static ArrayList itemList;
+        public static ArrayList bombList; //only needed for WWII
+        public static int screen_Offset;
 
 
         public Level(Game1 game)
@@ -46,22 +51,27 @@ namespace CS113_Game
             cam = new Camera2D();
             cam.position = new Vector2((float)-Game1.screen_Width / 2, (float)-Game1.screen_Height / 2);
 
-            HUD = new HUDManager();
-
-            reticle = Game1.content_Manager.Load<Texture2D>("Sprites/Projectiles/Reticle");
-            reticle_Rect = new Rectangle(0, 0, reticle.Width, reticle.Height);
-
             platformList = new ArrayList();
             characterList = new ArrayList();
             enemyList = new ArrayList();
+            itemList = new ArrayList();
+            bombList = new ArrayList();
             spawners = new ArrayList();
 
 
             Texture2D characterTexture = Game1.content_Manager.Load<Texture2D>("Sprites/Characters/AkiraSpriteSheet");
 
-            current_Character = new MainCharacter(game, characterTexture);
+            current_Character = new MainCharacter(game, characterTexture, new Vector2(100.0f, 600.0f));
+            current_Character.Gems = LevelSelectScreen.characterGems;
             characterList.Add(current_Character);
 
+            text_Editor = new TextEditor();
+            HUD = new HUDManager();
+
+            reticle = Game1.content_Manager.Load<Texture2D>("Sprites/Projectiles/Reticle");
+            reticle_Rect = new Rectangle(0, 0, reticle.Width, reticle.Height);
+
+            screen_Offset = 0;
         }
 
         public void Update(GameTime gameTime, InputHandler handler)
@@ -74,9 +84,36 @@ namespace CS113_Game
 
             current_Character.Update(gameTime, handler);
             
+            //update all the spawners
             foreach (Spawner spawner in spawners)
                 spawner.Update(gameTime);
 
+
+
+            //we need try/catch blocks just in case the list is empty and the game wants to crash (lame)
+            try
+            {
+                foreach (Bomb bomb in bombList)
+                {
+                    if (bomb != null)
+                        bomb.Update(gameTime);
+                }
+
+                //update all the items in the level
+
+                foreach (Item item in itemList)
+                {
+                    if (item != null)
+                        item.Update();
+                }
+            }
+            catch (Exception e)
+            {
+                //do nothing
+                //code is getting weird and redundant. fix this
+            }
+
+            //each character in the list needs to be checked to see if they are any of the platforms
             foreach (Character character in characterList)
             {
                 Rectangle characterRectangle = character.getCharacterRect();
@@ -146,8 +183,22 @@ namespace CS113_Game
                 enemy.Draw(gameTime, spriteBatch);
             }
 
+            try
+            {
+                foreach (Item item in itemList)
+                {
+                    if (item != null)
+                        item.Draw(spriteBatch);
+                }
+            }
+            catch (Exception e)
+            {
+                //do nothing
+                //code is getting weird and redundant. fix this
+            }
 
             HUD.Draw(spriteBatch);
+            text_Editor.Draw(spriteBatch);
 
             spriteBatch.Draw(reticle, reticle_Rect, Color.White);
 

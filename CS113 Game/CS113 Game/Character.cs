@@ -11,16 +11,44 @@ namespace CS113_Game
 {
     public abstract class Character : DrawableGameComponent 
     {
+        protected GameTime current_Game_Time;
+        protected GameTime previous_Game_Time;
         protected Vector2 previousPosition;
         protected Rectangle character_Rect;
+        protected Rectangle sprite_Rect;
         protected Texture2D character_Texture;
-        protected enum direction { left, right };
-        protected Color color_Tint;
+        protected Color color_Tint = Color.White;
+        protected Weapon equipped_Weapon;
+        protected Gem currentGem;
+
+        protected int base_Speed;
         protected int movement_Speed;
         protected int gravity = 1;
-        protected int jump_Speed = 30;
+        protected int base_Jump_Speed = 20;
+        protected int jump_Speed = 0;
         protected int texture_Offset;
+        protected int power = 100;
+
+        protected bool has_Weapon = false;
+        protected bool effect_Active = false;
+        protected bool takingDOT = false;
+        protected int dotTime = 0;
+
+        //the direction the sprite is facing
+        public enum direction { left, right };
+        public direction facing;
+
+        //the size of the character that we need to accomdate for the sprite sheet
+        protected Vector2 origin;
+        protected int standing_X; //the position in the sprite sheet where we are standing and facing to the left
+        protected int character_Width;
+        protected int character_Height;
+        protected int sprite_Count;
+        protected int current_Sprite_Count;
+        protected int time_Per_Animation; //every 90 ms we change animation
+        protected int time_Passed;
         
+
         public Vector2 position;
         public Rectangle standing_Platform;
         public int health;
@@ -28,12 +56,56 @@ namespace CS113_Game
         public bool jumping = false;
         public bool falling = false;
 
+        //these will be the different kinds of effects that can be applied to characters
+        public enum Effect { NORMAL, FIRE, ICE, SPEED }
+        public Effect currentEffect = Effect.NORMAL;
+        public Effect weaponEffect = Effect.NORMAL;
+        public int currentFireTime = 0; 
+        public int timeToLive_FIRE = 5000; //fire effects will last for 5 seconds
+        public int fireTick = 500; //take damage every half second 
+        public int fireDamage = 3;
+
+        protected Game1 gameRef;
+
+        public int BaseSpeed
+        {
+            get { return base_Speed; }
+        }
+
+        public int Speed
+        {
+            get { return movement_Speed; }
+            set { movement_Speed = value; }
+        }
+
+        public Weapon Weapon
+        {
+            get { return equipped_Weapon; }
+        }
+
+        public int Power
+        {
+            get { return power; }
+            set { power = value; }
+        }
+
+        public Gem CurrentGem
+        {
+            get { return currentGem; }
+        }
 
 
-        public Character(Game game)
+
+        public Character(Game1 game)
             : base(game)
         {
+            
+        }
 
+        public void switchWeapon(Weapon weapon)
+        {
+            equipped_Weapon = weapon;
+            HUDManager.AmmoWord = Level.text_Editor.updateWord(HUDManager.AmmoWord, weapon.Ammo.ToString());
         }
 
         //every character in the game should be affected by gravity
@@ -65,22 +137,103 @@ namespace CS113_Game
 
         
         //methods that affect the character
-        public void moveLeft()
+        public Rectangle moveLeft()
         {
             position.X = position.X - movement_Speed;
+            facing = direction.left;
+
+            sprite_Rect.Y = 0;
+            sprite_Rect.X = character_Width * current_Sprite_Count;
+
+            //if enough time has passed, move on to the next animation
+            if (time_Passed > time_Per_Animation)
+            {
+                current_Sprite_Count++;
+                time_Passed = 0;
+            }
+
+            if (current_Sprite_Count > sprite_Count)
+                current_Sprite_Count = 0;
+
+            if (position.X < 0)
+                position.X = 0;
+
+            return sprite_Rect;
         }
 
-        public void moveRight()
+        public Rectangle moveRight()
         {
             position.X = position.X + movement_Speed;
+            facing = direction.right;
+
+            sprite_Rect.Y = character_Height;
+            sprite_Rect.X = character_Width * current_Sprite_Count;
+
+            if (time_Passed > time_Per_Animation)
+            {
+                current_Sprite_Count++;
+                time_Passed = 0;
+            }
+
+            if (current_Sprite_Count > sprite_Count)
+                current_Sprite_Count = 0;
+
+            return sprite_Rect;
         }
 
+        //characters will take damage and turn orange for a frame
         public void takeDamage(int damage)
         {
             health = health - damage;
-            color_Tint = Color.Red;
+
+            if (!effect_Active)
+                color_Tint = Color.OrangeRed;
         }
 
+        public void takeFireDOT(GameTime gameTime)
+        {
+            currentFireTime += gameTime.ElapsedGameTime.Milliseconds;
+
+            if (currentFireTime % fireTick <= 10)
+            {
+                health -= fireDamage;
+
+                if (currentFireTime >= timeToLive_FIRE)
+                {
+                    currentEffect = Effect.NORMAL;
+                    currentFireTime = 0;
+                    effect_Active = false;
+                    takingDOT = false;
+                    color_Tint = Color.White;
+                }
+            }
+        }
+
+        //when a an effect hits the player, we must change variables to meet this effect
+        public void applyEffectDamage(Effect effect)
+        {
+            
+            //depending on what effect the character was hit with, change our effect status and color shader
+            switch (effect)
+            {
+                //getting a fire effect will cause the character to take fire damage over time
+                case Effect.FIRE :
+                    currentEffect = Effect.FIRE;
+                    color_Tint = Color.Red;
+                    effect_Active = true;
+                    takingDOT = true;
+                    currentFireTime = 0; //reset the time to take damage
+                    break;
+
+                //getting an ice effect will slow the enemy
+                case Effect.ICE :
+                    currentEffect = Effect.ICE;
+                    color_Tint = Color.DarkCyan;
+                    effect_Active = true;
+                    movement_Speed = 1;
+                    break;
+            }
+        }
 
 
         //get methods

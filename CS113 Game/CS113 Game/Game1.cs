@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Audio;
 
 namespace CS113_Game
 {
@@ -21,6 +22,9 @@ namespace CS113_Game
 
         public static int screen_Width = 1200;
         public static int screen_Height = 800;
+        public static GameTime currentGameTime;
+        public static GameTime previousGameTime;
+        public static SoundEffect backgroundMusic;
 
         private static Stack<Screen> screen_Stack;
         private static Screen current_Screen;
@@ -90,16 +94,23 @@ namespace CS113_Game
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            previousGameTime = currentGameTime;
+            currentGameTime = gameTime;
+
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            input_Handler.Update(gameTime, PlayerIndex.One);
+            input_Handler.Update(gameTime);
 
             if (input_Handler.keyReleased(Keys.Escape))
             {
                 IsMouseVisible = true;
-                popScreenStack();
+
+                if (screen_Stack.Count == 1)
+                    this.Exit();
+                else
+                    popScreenStack();
             }
 
 

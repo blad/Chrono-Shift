@@ -12,29 +12,50 @@ namespace CS113_Game
 {
     public abstract class Weapon : DrawableGameComponent
     {
+        protected Character source_Character;
         protected Rectangle weapon_Rect;
+        protected Rectangle sprite_Rect;
         protected Vector2 position;
         protected SoundEffect weapon_Sound;
-        protected int max_Ammo_Count;
-        protected int current_Ammo_Count;
+        protected int ammo;
+        protected int left_Sprite_Position;
         protected int attack_Speed;
         protected int time_Passed;
+        protected int texture_Offset;
+
+        protected bool player_Target;
 
         public enum FireType { Auto, SingleShot };
         public FireType fireType;
 
-        public Weapon(Game1 game)
+        public int Ammo
+        {
+            get { return ammo; }
+        }
+
+        public int Offset
+        {
+            get { return texture_Offset; }
+            set { texture_Offset = value; }
+        }
+
+        public Weapon(Game1 game, Character character, bool target)
             : base(game)
         {
-            
+            source_Character = character;
+            player_Target = target;
         }
+
+        
 
         public void changePosition(Vector2 newPosition)
         {
             position = newPosition;
         }
 
-        public abstract void fire(Point mousePoint,  int offset);
+        //one fire method is for players, the other for enemies
+        public abstract void fire(Point mousePoint);
+        public abstract void fire();
         public abstract void Update(GameTime gameTime, InputHandler handler);
         public abstract void Draw(SpriteBatch spriteBatch);
     }

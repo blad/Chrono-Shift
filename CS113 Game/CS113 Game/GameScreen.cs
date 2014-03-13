@@ -13,6 +13,8 @@ namespace CS113_Game
     public class GameScreen : Screen
     {
         private Level current_Level;
+        
+        
         Game1 gameRef;
 
         //adds the InputHanlder to the class
