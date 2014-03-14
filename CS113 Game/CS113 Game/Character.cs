@@ -89,6 +89,12 @@ namespace CS113_Game
             set { power = value; }
         }
 
+        public void changePower(int additional)
+        {
+            power += additional;
+            Level.HUD.shortenPowerBar(power);
+        }
+
         public Gem CurrentGem
         {
             get { return currentGem; }

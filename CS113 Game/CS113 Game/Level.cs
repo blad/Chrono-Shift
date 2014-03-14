@@ -176,12 +176,12 @@ namespace CS113_Game
                 spriteBatch.Draw(platform_Texture, rect, Color.White);
             }
 
-            current_Character.Draw(gameTime, spriteBatch);
-
             foreach (Enemy enemy in enemyList)
             {
                 enemy.Draw(gameTime, spriteBatch);
             }
+
+            current_Character.Draw(gameTime, spriteBatch);
 
             try
             {

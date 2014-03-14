@@ -11,7 +11,7 @@ namespace CS113_Game
             : base()
         {
             power = AbilityPower.FIRE;
-            power_Cost = 5;
+            power_Cost = 2;
         }
 
         public override void ApplyAbility()

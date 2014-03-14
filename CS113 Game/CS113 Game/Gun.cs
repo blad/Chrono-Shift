@@ -109,8 +109,7 @@ namespace CS113_Game
 
                 if (source_Character.weaponEffect != Character.Effect.NORMAL)
                 {
-                    source_Character.Power -= source_Character.CurrentGem.Cost;
-                    Level.HUD.shortenPowerBar(source_Character.Power);
+                    source_Character.changePower(-source_Character.CurrentGem.Cost);
                 }
 
                 HUDManager.AmmoWord = Level.text_Editor.updateWord(HUDManager.AmmoWord, (--ammo).ToString());

@@ -122,6 +122,7 @@
     <Compile Include="NaziPlaneEnemy.cs" />
     <Compile Include="NaziTankEnemy.cs" />
     <Compile Include="Pistol.cs" />
+    <Compile Include="PowerPack.cs" />
     <Compile Include="RobamaBoss.cs" />
     <Compile Include="Bullet.cs" />
     <Compile Include="Button.cs" />

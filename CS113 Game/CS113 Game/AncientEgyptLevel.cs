@@ -46,7 +46,7 @@ namespace CS113_Game
 
 
             //spawners
-            Spawner spawner_1 = new Spawner(gameRef, new Vector2(1000.0f, 250.0f), Spawner.EnemyType.Robama);
+            Spawner spawner_1 = new Spawner(gameRef, new Vector2(1000.0f, 250.0f), Spawner.EnemyType.mummy);
             spawners.Add(spawner_1);
 
             Spawner spawner_4 = new Spawner(gameRef, new Vector2(1100.0f, 600.0f), Spawner.EnemyType.mummy);
