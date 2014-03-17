@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace CS113_Game
 {
@@ -19,6 +20,11 @@ namespace CS113_Game
         private Rectangle button_Rect;
 
         private bool has_Texture;
+
+        public Rectangle Rect
+        {
+            get { return button_Rect; }
+        }
 
         //first constructor that takes a texture
         public Button(Texture2D texture, int positionX, int positionY)
@@ -53,7 +59,7 @@ namespace CS113_Game
 
         public bool buttonPressed(InputHandler handler)
         {
-            return handler.leftMouseClicked() && button_Rect.Contains(handler.mousePosition());
+            return (handler.leftMouseClicked() && button_Rect.Contains(handler.mousePosition()) || handler.buttonPressed(Buttons.A));
         }
 
         public void Draw(SpriteBatch spriteBatch)

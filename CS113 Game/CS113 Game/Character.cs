@@ -52,9 +52,11 @@ namespace CS113_Game
         public Vector2 position;
         public Rectangle standing_Platform;
         public int health;
+        public int characterNumber = 0;
         public bool grounded = false;
         public bool jumping = false;
         public bool falling = false;
+        public bool isPlayer = false;
 
         //these will be the different kinds of effects that can be applied to characters
         public enum Effect { NORMAL, FIRE, ICE, SPEED }
@@ -92,7 +94,7 @@ namespace CS113_Game
         public void changePower(int additional)
         {
             power += additional;
-            Level.HUD.shortenPowerBar(power);
+            Level.HUD.shortenPowerBar(power, this.characterNumber);
         }
 
         public Gem CurrentGem
@@ -111,7 +113,11 @@ namespace CS113_Game
         public void switchWeapon(Weapon weapon)
         {
             equipped_Weapon = weapon;
-            HUDManager.AmmoWord = Level.text_Editor.updateWord(HUDManager.AmmoWord, weapon.Ammo.ToString());
+            
+            if (characterNumber == 1)
+                HUDManager.AmmoCountOne = Level.text_Editor.updateWord(HUDManager.AmmoCountOne, weapon.Ammo.ToString());
+            else if (characterNumber == 2)
+                HUDManager.AmmoCountTwo = Level.text_Editor.updateWord(HUDManager.AmmoCountTwo, weapon.Ammo.ToString());
         }
 
         //every character in the game should be affected by gravity
@@ -195,6 +201,7 @@ namespace CS113_Game
             if (!effect_Active)
                 color_Tint = Color.OrangeRed;
         }
+
 
         public void takeFireDOT(GameTime gameTime)
         {

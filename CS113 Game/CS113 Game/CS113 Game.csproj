@@ -107,6 +107,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BobaBoothEnemy.cs" />
     <Compile Include="FireGem.cs" />
     <Compile Include="Gem.cs" />
     <Compile Include="AncientEgyptLevel.cs" />
@@ -147,6 +148,7 @@
     <Compile Include="Spawner.cs" />
     <Compile Include="SphinxBoss.cs" />
     <Compile Include="StartScreen.cs" />
+    <Compile Include="SwagmanEnemy.cs" />
     <Compile Include="TextEditor.cs" />
     <Compile Include="TimeGem.cs" />
     <Compile Include="Weapon.cs" />

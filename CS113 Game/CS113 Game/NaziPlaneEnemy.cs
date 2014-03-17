@@ -57,12 +57,15 @@ namespace CS113_Game
             current_Attack_Time += current_Game_Time.ElapsedGameTime.Milliseconds;
             time_Passed += gameTime.ElapsedGameTime.Milliseconds;
 
-            if ((character_Rect.Center.X < character_To_Attack.getCharacterRect().Center.X + 5
-                && character_Rect.Center.X > character_To_Attack.getCharacterRect().Center.X - 5) 
-                && current_Attack_Time >= attack_Time)
+            foreach (MainCharacter c in Level.playerList)
             {
-                current_Attack_Time = 0;
-                Attack();
+                if ((character_Rect.Center.X < c.getCharacterRect().Center.X + 5
+                    && character_Rect.Center.X > c.getCharacterRect().Center.X - 5)
+                    && current_Attack_Time >= attack_Time)
+                {
+                    current_Attack_Time = 0;
+                    Attack();
+                }
             }
 
 

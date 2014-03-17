@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Input;
 
 namespace CS113_Game
 {
@@ -15,9 +16,14 @@ namespace CS113_Game
 
         private Texture2D background;
         private Rectangle background_Rect;
+        private Texture2D arrowSelect;
+        private int arrowX = 50;
+        private int arrowY = 30;
+        private Rectangle arrowRect;
         private enum Levels { Egypt, Space, Dino, UCI, WWII };
         private Levels selected_Level;
-        private ArrayList buttons;
+        private LinkedList<Button> buttons;
+        private LinkedListNode<Button> currentButton;
 
         private Button egyptButton;
         private Button prehistoricButton;
@@ -39,16 +45,23 @@ namespace CS113_Game
             background = Game1.content_Manager.Load<Texture2D>("Backgrounds/Menus/stage_select_bg");
             background_Rect = new Rectangle(0, 0, background.Width, background.Height);
 
-            buttons = new ArrayList();
+            
+
+            buttons = new LinkedList<Button>();
 
             egyptButton = new Button(85, 95, ButtonWidth, ButtonHeight);
-            buttons.Add(egyptButton);
+            buttons.AddLast(egyptButton);
 
             prehistoricButton = new Button(295, 440, ButtonWidth, ButtonHeight);
-            buttons.Add(prehistoricButton);
+            buttons.AddLast(prehistoricButton);
 
             WWIIButton = new Button(745, 440, ButtonWidth, ButtonHeight);
-            buttons.Add(WWIIButton);
+            buttons.AddLast(WWIIButton);
+
+            arrowSelect = Game1.content_Manager.Load<Texture2D>("Sprites/Buttons/SelectArrow");
+            arrowRect = new Rectangle(egyptButton.Rect.X + arrowX, egyptButton.Rect.Y - arrowY, arrowSelect.Width, arrowSelect.Height);
+
+            currentButton = buttons.First;
         }
 
 
@@ -74,30 +87,57 @@ namespace CS113_Game
         {
             gameRef.IsMouseVisible = true;
 
-            if (egyptButton.buttonPressed(handler))
+            if (handler.buttonPressed(Buttons.DPadRight))
             {
-                selected_Level = Levels.Egypt;
-                loadLevel();
+                if (currentButton.Next != null)
+                    currentButton = currentButton.Next;
+                else
+                    currentButton = buttons.First;
+
+                arrowRect.X = currentButton.Value.Rect.X + arrowX;
+                arrowRect.Y = currentButton.Value.Rect.Y - arrowY;
             }
 
-            else if (prehistoricButton.buttonPressed(handler))
+            else if (handler.buttonPressed(Buttons.DPadLeft))
             {
-                selected_Level = Levels.Dino;
+                if (currentButton.Previous != null)
+                    currentButton = currentButton.Previous;
+                else
+                    currentButton = buttons.Last;
+
+                arrowRect.X = currentButton.Value.Rect.X + arrowX;
+                arrowRect.Y = currentButton.Value.Rect.Y - arrowY;
+            }
+
+            if (handler.buttonPressed(Buttons.A))
+            {
+                if (currentButton.Value == egyptButton)
+                {
+                    selected_Level = Levels.Egypt;
+                }
+                else if (currentButton.Value == prehistoricButton)
+                {
+                    selected_Level = Levels.Dino;
+                }
+                else if (currentButton.Value == WWIIButton)
+                {
+                    selected_Level = Levels.WWII;
+                }
+
                 loadLevel();
             }
-            else if (WWIIButton.buttonPressed(handler))
-            {
-                selected_Level = Levels.WWII;
-                loadLevel();
-            }
+            
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
+            spriteBatch.Draw(arrowSelect, arrowRect, Color.White);
             spriteBatch.Draw(background, background_Rect, Color.White);
+            
 
             foreach (Button button in buttons)
                 button.Draw(spriteBatch);
         }
     }
+
 }

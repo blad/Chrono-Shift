@@ -44,7 +44,7 @@ namespace CS113_Game
         //the soldier will fire 3 shots
         public override void Attack()
         {
-            equipped_Weapon.fire();
+            equipped_Weapon.fire(character_To_Attack);
         }
 
 

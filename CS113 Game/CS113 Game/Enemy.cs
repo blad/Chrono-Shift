@@ -12,7 +12,7 @@ namespace CS113_Game
 {
     public abstract class Enemy : Character
     {
-        protected MainCharacter character_To_Attack = Level.current_Character;
+        protected MainCharacter character_To_Attack;
 
         protected int attack_Time = 200; //the amount of time we will wait to attempt an attack
         protected int current_Attack_Time = 0; //this will be compared with attack_Time to see if enough time has passed to attack
@@ -26,6 +26,16 @@ namespace CS113_Game
         {
             gameRef = game;
             this.spawner = spawner;
+
+            Random rand = new Random();
+            int r = rand.Next(1,3);
+
+           foreach (MainCharacter c in Level.playerList)
+           {
+               if (c.characterNumber == r)
+                   character_To_Attack = c;
+           }
+
         }
 
         public Enemy(Game1 game)

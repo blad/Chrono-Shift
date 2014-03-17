@@ -25,9 +25,12 @@ namespace CS113_Game
 
         public void Update()
         {
-            if (item_Rect.Intersects(Level.current_Character.getCharacterRect()))
+            foreach (MainCharacter c in Level.playerList)
             {
-                pickUp(Level.current_Character);
+                if (item_Rect.Intersects(c.getCharacterRect()))
+                {
+                    pickUp(c);
+                }
             }
 
             if (position.Y < Level.ground_Rect.Y - item_Texture.Height)

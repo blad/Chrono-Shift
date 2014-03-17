@@ -8,7 +8,6 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
-using Microsoft.Xna.Framework.Audio;
 
 namespace CS113_Game
 {
@@ -24,12 +23,13 @@ namespace CS113_Game
         public static int screen_Height = 800;
         public static GameTime currentGameTime;
         public static GameTime previousGameTime;
-        public static SoundEffect backgroundMusic;
+        public static SoundEffectInstance backgroundMusic;
 
         private static Stack<Screen> screen_Stack;
         private static Screen current_Screen;
 
-        static InputHandler input_Handler;
+        public InputHandler input_Handler_Player1;
+        public InputHandler input_Handler_Player2;
         public static ContentManager content_Manager;
 
         public static Camera2D cam;
@@ -45,7 +45,8 @@ namespace CS113_Game
             cam.position = new Vector2((float)-screen_Width / 2, (float)-screen_Height / 2);
 
             screen_Stack = new Stack<Screen>();
-            input_Handler = new InputHandler(PlayerIndex.One);
+            input_Handler_Player1 = new InputHandler(PlayerIndex.One);
+            input_Handler_Player2 = new InputHandler(PlayerIndex.Two);
 
             IsMouseVisible = true;
         }
@@ -74,6 +75,11 @@ namespace CS113_Game
 
             // TODO: use this.Content to load your game content here
             content_Manager = Content;
+
+            backgroundMusic = content_Manager.Load<SoundEffect>("SoundEffects/BackgroundMusic/Level_Select_BGM").CreateInstance();;
+            backgroundMusic.IsLooped = true;
+            backgroundMusic.Play();
+
             addScreenToStack(new StartScreen(this));
 
         }
@@ -98,23 +104,33 @@ namespace CS113_Game
             currentGameTime = gameTime;
 
             // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                this.Exit();
+            
 
-            input_Handler.Update(gameTime);
+            input_Handler_Player1.Update(gameTime);
+            input_Handler_Player2.Update(gameTime);
 
-            if (input_Handler.keyReleased(Keys.Escape))
+            if (input_Handler_Player1.buttonPressed(Buttons.Back))
+            {
+                if (screen_Stack.Count > 1)
+                    popScreenStack();
+                else
+                    this.Exit();
+            }
+
+            if (input_Handler_Player1.keyReleased(Keys.Escape))
             {
                 IsMouseVisible = true;
 
                 if (screen_Stack.Count == 1)
+                {
                     this.Exit();
+                }
                 else
                     popScreenStack();
             }
 
 
-            current_Screen.Update(gameTime, input_Handler);
+            current_Screen.Update(gameTime, input_Handler_Player1);
 
             base.Update(gameTime);
         }
@@ -152,6 +168,13 @@ namespace CS113_Game
         {
             screen_Stack.Pop();
             current_Screen = screen_Stack.Peek();
+
+            if (screen_Stack.Count == 2)
+            {
+                backgroundMusic.Stop();
+                backgroundMusic = content_Manager.Load<SoundEffect>("SoundEffects/BackgroundMusic/Level_Select_BGM").CreateInstance();
+                backgroundMusic.Play();
+            }
         }
 
     }

@@ -45,7 +45,7 @@ namespace CS113_Game
         //when we fire we need the location of the mouse pointer to find the angle at whcih we shoot
         //and an offset so that the point is relative to the position of the mouse in the game space and not the screen
         //this is the fire method that players use
-        public override void fire(Point mousePoint)
+        public override void fire(InputHandler handler)
         {
             time_Passed += current_Time.ElapsedGameTime.Milliseconds;
 
@@ -64,12 +64,8 @@ namespace CS113_Game
 
 
                 //the 45 here may change
-                if (mousePoint.X + Level.screen_Offset < startPosition.X + 45)
-                {
+                if (source_Character.facing == Character.direction.left && theta == 0)
                     xSpeed = -xSpeed;
-                    theta = -theta;
-                    invert = true;
-                }
 
                 
 
@@ -112,12 +108,15 @@ namespace CS113_Game
                     source_Character.changePower(-source_Character.CurrentGem.Cost);
                 }
 
-                HUDManager.AmmoWord = Level.text_Editor.updateWord(HUDManager.AmmoWord, (--ammo).ToString());
+                if (source_Character.characterNumber == 1)
+                    HUDManager.AmmoCountOne = Level.text_Editor.updateWord(HUDManager.AmmoCountOne, (--ammo).ToString());
+                else if (source_Character.characterNumber == 2)
+                    HUDManager.AmmoCountTwo = Level.text_Editor.updateWord(HUDManager.AmmoCountTwo, (--ammo).ToString());
             }
         }
 
         //this is the fire method for enemies
-        public override void fire()
+        public override void fire(Character characterToAttack)
         {
             time_Passed += current_Time.ElapsedGameTime.Milliseconds;
 
@@ -135,7 +134,7 @@ namespace CS113_Game
                 bool invert = false;
 
                 //the 45 here may change
-                if (Level.current_Character.position.X < position.X + 45)
+                if (characterToAttack.position.X < position.X + 45)
                 {
                     xSpeed = -xSpeed;
                     theta = -theta;
@@ -189,34 +188,15 @@ namespace CS113_Game
             current_Time = gameTime;
 
             startPosition = position;// +(new Vector2((float)weapon_Texture.Width / 2 - 15, texture_Offset));
-            startPosition.Y += texture_Offset;
-            
+            startPosition.Y += texture_Offset;            
 
             //find where the mouse is based on the gamespace and find the angle at which we are aiming
-            Point mousePoint = handler.mousePosition();
 
             //this changest the characters direction based on where the player is aiming
-            if (mousePoint.X + Level.screen_Offset < source_Character.position.X + source_Character.getCharacterRect().Width / 2)
-            {
-                source_Character.facing = Character.direction.left;
-                sprite_Rect.X = left_Sprite_Position;
-                startPosition.X += 50;
-            }
-            else
-            {
-                source_Character.facing = Character.direction.right;
-                sprite_Rect.X = 0;
-                startPosition.X += 50;
-            }
+            
+            theta = handler.getRightThumbStickAngle();
 
-
-            int distanceX = mousePoint.X + Level.screen_Offset - (int)startPosition.X;
-            int distanceY = mousePoint.Y - (int)startPosition.Y;
-
-
-            float hypotnuse = (float)Math.Sqrt(distanceX * distanceX + distanceY * distanceY);
-
-            theta = (float)Math.Asin(distanceY / hypotnuse);
+            
 
             weapon_Rect.X = (int)position.X;
             weapon_Rect.Y = (int)position.Y + texture_Offset;
@@ -242,8 +222,8 @@ namespace CS113_Game
             startPosition.Y += texture_Offset;
 
             //we will point at the character, not the position of the mouse
-            int distanceX = (int)Level.current_Character.getCharacterRect().Center.X - (int)startPosition.X;
-            int distanceY = (int)Level.current_Character.getCharacterRect().Center.Y - (int)startPosition.Y;
+            int distanceX = (int)Level.player1.getCharacterRect().Center.X - (int)startPosition.X;
+            int distanceY = (int)Level.player1.getCharacterRect().Center.Y - (int)startPosition.Y;
 
             float hypotnuse = (float)Math.Sqrt(distanceX * distanceX + distanceY * distanceY);
 
@@ -267,14 +247,22 @@ namespace CS113_Game
 
             if (source_Character.facing == Character.direction.left)
             {
-                weaponAngle = -theta;
+                if (!source_Character.isPlayer)
+                    weaponAngle = -weaponAngle;
+                else
+                    if (weaponAngle != 0)
+                        weaponAngle =  weaponAngle - MathHelper.Pi;
+
                 sprite_Rect.X = left_Sprite_Position;
             }
-            else
+            else if (source_Character.facing == Character.direction.right)
+            {
                 sprite_Rect.X = 0;
+            }
 
-            weapon_Rect.X += 50;
-            spriteBatch.Draw(weapon_Texture, weapon_Rect, sprite_Rect, Color.White, MathHelper.PiOver4*weaponAngle, 
+            weapon_Rect.X += weapon_Texture.Width/4;
+
+            spriteBatch.Draw(weapon_Texture, weapon_Rect, sprite_Rect, Color.White, weaponAngle, 
                                 new Vector2(sprite_Rect.Width/2, sprite_Rect.Height/2), SpriteEffects.None, 1.0f);
 
             foreach (Bullet b in bullet_List)

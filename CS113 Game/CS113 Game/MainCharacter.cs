@@ -11,14 +11,22 @@ namespace CS113_Game
 {
     public class MainCharacter : PlayableCharacter
     {
-        public MainCharacter(Game1 game, Texture2D characterTexture, Vector2 position)
-            : base(game)
+        public MainCharacter(Game1 game, InputHandler myHandler, Texture2D characterTexture, Vector2 position, int myNumber)
+            : base(game, myHandler)
         {
+            this.characterNumber = myNumber;
             character_Texture = characterTexture;
             this.position = position;
 
             equipped_Weapon = new Pistol(game, this, false, this.position);
             has_Weapon = true;
+
+            if (characterNumber == 1)
+                identifyArrow = Game1.content_Manager.Load<Texture2D>("Sprites/Misc/BlueCharacterArrow");
+            else
+                identifyArrow = Game1.content_Manager.Load<Texture2D>("Sprites/Misc/RedCharacterArrow");
+
+            arrowRect = new Rectangle((int)position.X + character_Rect.Width/4, (int)position.Y, identifyArrow.Width, identifyArrow.Height);
         }
 
     }

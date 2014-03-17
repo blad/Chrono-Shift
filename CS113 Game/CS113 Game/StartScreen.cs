@@ -6,6 +6,7 @@ using System.Collections;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Input;
 
 namespace CS113_Game
 {
@@ -31,7 +32,7 @@ namespace CS113_Game
 
         public override void Update(GameTime gameTime, InputHandler handler)
         {
-            if (start_Button.buttonPressed(handler))
+            if (handler.buttonPressed((Buttons.Start)))
             {
                 Game1.addScreenToStack(new LevelSelectScreen(gameRef));
             }

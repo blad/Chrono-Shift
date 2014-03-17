@@ -32,6 +32,6 @@ namespace CS113_Game
 
         }
 
-        public abstract void ApplyAbility();
+        public abstract void ApplyAbility(Character c);
     }
 }

@@ -14,9 +14,9 @@ namespace CS113_Game
             power_Cost = 0;
         }
 
-        public override void ApplyAbility()
+        public override void ApplyAbility(Character c)
         {
-            Level.current_Character.weaponEffect = Character.Effect.NORMAL;
+            c.weaponEffect = Character.Effect.NORMAL;
         }
     }
 }

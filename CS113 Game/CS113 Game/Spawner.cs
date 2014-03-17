@@ -14,7 +14,6 @@ namespace CS113_Game
     //this class will spawn enemies off the screen
     public class Spawner
     {
-        private Character character_To_Watch = Level.current_Character;
 
         private ArrayList enemies;
         private int max_Enemies;
@@ -27,7 +26,7 @@ namespace CS113_Game
         
 
         public Vector2 position;
-        public enum EnemyType { basic, segway, mummy, naziPlane,naziTank, Sphinx,Robama, FireRex}
+        public enum EnemyType { basic, segway, mummy, swagman, naziPlane, naziTank, bobaBooth, Sphinx, Robama, FireRex}
         public EnemyType typeToSpawn;
         Game1 gameRef;
 
@@ -89,6 +88,12 @@ namespace CS113_Game
                     case (EnemyType.naziTank):
                         enemy = new NaziTankEnemy(gameRef, this, this.position);
                         break;
+                    case (EnemyType.swagman):
+                        enemy = new SwagmanEnemy(gameRef, this, this.position);
+                        break;
+                    case (EnemyType.bobaBooth):
+                        enemy = new BobaBoothEnemy(gameRef, this, this.position);
+                        break;
                     case (EnemyType.Robama):
                         enemy = new RobamaBoss(gameRef, this, this.position);
                         break;
@@ -119,8 +124,12 @@ namespace CS113_Game
             current_Time += gameTime.ElapsedGameTime.Milliseconds;
 
             //when the player has come close enough to the spawner, the spawner becomes active
-            if (position.X - character_To_Watch.position.X < 500)
-                active = true;
+
+            foreach (MainCharacter c in Level.playerList)
+            {
+                if (position.X - c.position.X < 500)
+                    active = true;
+            }
 
             try
             {

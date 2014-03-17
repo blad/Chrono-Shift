@@ -126,10 +126,13 @@ namespace CS113_Game
             }
             else
             {
-                if (bullet_Rect.Intersects(Level.current_Character.getCharacterRect()))
+                foreach (MainCharacter c in Level.playerList)
                 {
-                    Level.current_Character.takeDamage(damage);
-                    source_Weapon.getBullets()[list_Position] = null;
+                    if (bullet_Rect.Intersects(c.getCharacterRect()))
+                    {
+                        c.takeDamage(damage);
+                        source_Weapon.getBullets()[list_Position] = null;
+                    }
                 }
             }
         }

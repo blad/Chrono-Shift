@@ -54,8 +54,8 @@ namespace CS113_Game
         }
 
         //one fire method is for players, the other for enemies
-        public abstract void fire(Point mousePoint);
-        public abstract void fire();
+        public abstract void fire(InputHandler handler);
+        public abstract void fire(Character characterToAttack);
         public abstract void Update(GameTime gameTime, InputHandler handler);
         public abstract void Draw(SpriteBatch spriteBatch);
     }

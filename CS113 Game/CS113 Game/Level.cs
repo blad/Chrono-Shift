@@ -32,7 +32,11 @@ namespace CS113_Game
 
         public static HUDManager HUD;
         public static TextEditor text_Editor;
-        public static MainCharacter current_Character;
+
+        public static MainCharacter player1;
+        public static MainCharacter player2;
+
+        public static ArrayList playerList;
         public static ArrayList characterList;
         public static ArrayList enemyList;
         public static ArrayList itemList;
@@ -53,6 +57,7 @@ namespace CS113_Game
 
             platformList = new ArrayList();
             characterList = new ArrayList();
+            playerList = new ArrayList();
             enemyList = new ArrayList();
             itemList = new ArrayList();
             bombList = new ArrayList();
@@ -61,9 +66,15 @@ namespace CS113_Game
 
             Texture2D characterTexture = Game1.content_Manager.Load<Texture2D>("Sprites/Characters/AkiraSpriteSheet");
 
-            current_Character = new MainCharacter(game, characterTexture, new Vector2(100.0f, 600.0f));
-            current_Character.Gems = LevelSelectScreen.characterGems;
-            characterList.Add(current_Character);
+            player1 = new MainCharacter(game, gameRef.input_Handler_Player1, characterTexture, new Vector2(100.0f, 600.0f), 1);
+            player1.Gems = LevelSelectScreen.characterGems;
+            characterList.Add(player1);
+            playerList.Add(player1);
+
+            player2 = new MainCharacter(game, gameRef.input_Handler_Player2, characterTexture, new Vector2(100.0f, 600.0f), 2);
+            player2.Gems = LevelSelectScreen.characterGems;
+            characterList.Add(player2);
+            playerList.Add(player2);
 
             text_Editor = new TextEditor();
             HUD = new HUDManager();
@@ -81,8 +92,8 @@ namespace CS113_Game
             reticle_Rect.X = screen_Offset + mousePosition.X - reticle.Width/2;
             reticle_Rect.Y = mousePosition.Y - reticle.Height/2;
 
-
-            current_Character.Update(gameTime, handler);
+            foreach(MainCharacter current_Character in playerList)
+                current_Character.Update(gameTime);
             
             //update all the spawners
             foreach (Spawner spawner in spawners)
@@ -143,18 +154,19 @@ namespace CS113_Game
             }
 
             //if the character is past a certain point on the camera's view, move the camera at the same speed the character moves
-            if (screen_Offset < level_Texture.Width - Game1.screen_Width && current_Character.getPosition().X > (-cam.position.X + Game1.screen_Width / 2 - distance_From_Camera))
+
+            if (screen_Offset < level_Texture.Width - Game1.screen_Width && player1.getPosition().X > (-cam.position.X + Game1.screen_Width / 2 - distance_From_Camera))
             {
-                cam.Move(new Vector2(-(float)current_Character.getSpeed(), 0.0f));
-                screen_Offset += current_Character.getSpeed();
-                HUD.translateHUD(current_Character.getSpeed());
+                cam.Move(new Vector2(-(float)player1.getSpeed(), 0.0f));
+                screen_Offset += player1.getSpeed();
+                HUD.translateHUD(player1.getSpeed());
             }
 
-            else if (screen_Offset > 0 && current_Character.getPosition().X < (-cam.position.X - Game1.screen_Width / 2 + distance_From_Camera))
+            else if (screen_Offset > 0 && player1.getPosition().X < (-cam.position.X - Game1.screen_Width / 2 + distance_From_Camera))
             {
-                cam.Move(new Vector2((float)current_Character.getSpeed(), 0.0f));
-                screen_Offset -= current_Character.getSpeed();
-                HUD.translateHUD(-current_Character.getSpeed());
+                cam.Move(new Vector2((float)player1.getSpeed(), 0.0f));
+                screen_Offset -= player1.getSpeed();
+                HUD.translateHUD(-player1.getSpeed());
             }
         }
 
@@ -181,7 +193,8 @@ namespace CS113_Game
                 enemy.Draw(gameTime, spriteBatch);
             }
 
-            current_Character.Draw(gameTime, spriteBatch);
+            foreach (MainCharacter current_Character in playerList)
+                current_Character.Draw(gameTime, spriteBatch);
 
             try
             {
@@ -200,7 +213,7 @@ namespace CS113_Game
             HUD.Draw(spriteBatch);
             text_Editor.Draw(spriteBatch);
 
-            spriteBatch.Draw(reticle, reticle_Rect, Color.White);
+            //spriteBatch.Draw(reticle, reticle_Rect, Color.White);
 
             spriteBatch.End();
         }

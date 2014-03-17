@@ -43,18 +43,25 @@ namespace CS113_Game
 
         public override void Attack()
         {
+            //throw new NotImplementedException();
+        }
+
+        public void Attack(PlayableCharacter c)
+        {
             health = 0;
-            character_To_Attack.takeDamage(Damage);
+            c.takeDamage(Damage);
             Damage = 0;// this to make sure we don't get hit more than once because of delays
         }
 
         public override void AIroutine(GameTime gameTime)
         {
-            if (character_To_Attack.getCharacterRect().Intersects(character_Rect))
-            {
-                Attack();
-            }
-            else if (Level.ground_Rect.Intersects(character_Rect))
+            foreach (MainCharacter c in Level.playerList)
+                if (character_Rect.Intersects(c.getCharacterRect()))
+                {
+                    Attack(c);
+                }
+
+            if (character_Rect.Intersects(Level.ground_Rect))
                 health = 0;
         }
     }

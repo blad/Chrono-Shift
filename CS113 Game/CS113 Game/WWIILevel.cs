@@ -39,7 +39,7 @@ namespace CS113_Game
             spawner_1.Max_Enemies = 2;
             spawners.Add(spawner_1);
 
-            Spawner spawner_2 = new Spawner(gameRef, new Vector2(200.0f, 600.0f), Spawner.EnemyType.basic);
+            Spawner spawner_2 = new Spawner(gameRef, new Vector2(200.0f, 600.0f), Spawner.EnemyType.bobaBooth);
             spawner_2.Max_Enemies = 5;
             spawners.Add(spawner_2);
 

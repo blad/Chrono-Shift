@@ -13,41 +13,41 @@ namespace CS113_Game
     public class InputHandler
     {
          //we must keep track of state changes for keyboard and mouse inputs
-        private static KeyboardState current_Keyboard_State;
-        private static KeyboardState previous_Keyboard_State;
-        private static MouseState current_Mouse_State;
-        private static MouseState previous_Mouse_State;
-        private static GamePadState current_GamePad_State;
-        private static GamePadState previous_GamePad_State;
+        private KeyboardState current_Keyboard_State;
+        private KeyboardState previous_Keyboard_State;
+        private MouseState current_Mouse_State;
+        private MouseState previous_Mouse_State;
+        private GamePadState current_GamePad_State;
+        private GamePadState previous_GamePad_State;
         private PlayerIndex index;
 
         //get methods
-        public static KeyboardState Current_Keyboard_State()
+        public KeyboardState Current_Keyboard_State()
         {
             return current_Keyboard_State;
         }
 
-        public static KeyboardState Previous_Keyboard_State()
+        public KeyboardState Previous_Keyboard_State()
         {
             return previous_Keyboard_State;
         }
 
-        public static MouseState Current_Mouse_State()
+        public MouseState Current_Mouse_State()
         {
             return current_Mouse_State;
         }
 
-        public static MouseState Previous_Mouse_State()
+        public MouseState Previous_Mouse_State()
         {
             return previous_Mouse_State;
         }
 
-        public static GamePadState Previous_GamePad_State()
+        public GamePadState Previous_GamePad_State()
         {
             return previous_GamePad_State;
         }
 
-        public static GamePadState Current_GamePad_State()
+        public GamePadState Current_GamePad_State()
         {
             return current_GamePad_State;
         }
@@ -101,6 +101,16 @@ namespace CS113_Game
         {
             return (previous_Mouse_State.LeftButton == ButtonState.Pressed) && 
                 (current_Mouse_State.LeftButton == ButtonState.Released);
+        }
+
+        public float getRightThumbStickAngle()
+        {
+            Vector2 rightStickDirection = current_GamePad_State.ThumbSticks.Right;
+
+            if (rightStickDirection.X != 0 && rightStickDirection.Y != 0)
+                rightStickDirection.Normalize();
+
+            return -(float)Math.Atan2(rightStickDirection.Y, rightStickDirection.X);
         }
     }
 }

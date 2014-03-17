@@ -22,7 +22,7 @@ namespace CS113_Game
 
         public override void pickUp(MainCharacter character)
         {
-            character.takeDamage(-health_Restored); //a simple way to add health back to the character with the damage method
+            character.addHealth(health_Restored); //a simple way to add health back to the character with the damage method
             Level.itemList.Remove(this);
         }
     }

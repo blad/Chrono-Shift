@@ -14,9 +14,9 @@ namespace CS113_Game
             power_Cost = 2;
         }
 
-        public override void ApplyAbility()
+        public override void ApplyAbility(Character c)
         {
-            Level.current_Character.weaponEffect = Character.Effect.FIRE;
+            c.weaponEffect = Character.Effect.FIRE;
         }
     }
 }
