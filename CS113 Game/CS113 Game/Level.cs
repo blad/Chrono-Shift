@@ -29,6 +29,7 @@ namespace CS113_Game
         protected Game1 gameRef;
 
         public static Rectangle ground_Rect;
+        public static String levelName;
 
         public static HUDManager HUD;
         public static TextEditor text_Editor;
@@ -44,7 +45,7 @@ namespace CS113_Game
         public static int screen_Offset;
 
 
-        public Level(Game1 game)
+        public Level(Game1 game, String levelName)
             : base(game)
         {
             
@@ -64,7 +65,7 @@ namespace CS113_Game
             spawners = new ArrayList();
 
 
-            Texture2D characterTexture = Game1.content_Manager.Load<Texture2D>("Sprites/Characters/AkiraSpriteSheet");
+            Texture2D characterTexture = Game1.content_Manager.Load<Texture2D>("Sprites/Characters/Akira2_spritesheet");
 
             player1 = new MainCharacter(game, gameRef.input_Handler_Player1, characterTexture, new Vector2(100.0f, 600.0f), 1);
             player1.Gems = LevelSelectScreen.characterGems;
@@ -76,7 +77,9 @@ namespace CS113_Game
             characterList.Add(player2);
             playerList.Add(player2);
 
+            
             text_Editor = new TextEditor();
+            Level.levelName = levelName;
             HUD = new HUDManager();
 
             reticle = Game1.content_Manager.Load<Texture2D>("Sprites/Projectiles/Reticle");

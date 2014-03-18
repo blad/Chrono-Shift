@@ -28,7 +28,7 @@ namespace CS113_Game
         protected int jump_Speed = 0;
         protected int texture_Offset;
         protected int spriteRectOffset;
-        protected int power = 100;
+        protected float power = 100;
 
         protected bool has_Weapon = false;
         protected bool effect_Active = false;
@@ -52,7 +52,7 @@ namespace CS113_Game
 
         public Vector2 position;
         public Rectangle standing_Platform;
-        public int health;
+        public float health;
         public int characterNumber = 0;
         public bool grounded = false;
         public bool jumping = false;
@@ -60,13 +60,15 @@ namespace CS113_Game
         public bool isPlayer = false;
 
         //these will be the different kinds of effects that can be applied to characters
-        public enum Effect { NORMAL, FIRE, ICE, SPEED }
+        public enum Effect { NORMAL, DAMAGE, ARMOR, FIRE, ICE, SPEED }
         public Effect currentEffect = Effect.NORMAL;
         public Effect weaponEffect = Effect.NORMAL;
         public int currentFireTime = 0; 
         public int timeToLive_FIRE = 5000; //fire effects will last for 5 seconds
         public int fireTick = 500; //take damage every half second 
         public int fireDamage = 3;
+        public int armorModifier = 1;
+        public int damageModifier = 1;
 
         protected Game1 gameRef;
 
@@ -86,13 +88,13 @@ namespace CS113_Game
             get { return equipped_Weapon; }
         }
 
-        public int Power
+        public float Power
         {
             get { return power; }
             set { power = value; }
         }
 
-        public void changePower(int additional)
+        public void changePower(float additional)
         {
             power += additional;
             Level.HUD.shortenPowerBar(power, this.characterNumber);
@@ -159,13 +161,13 @@ namespace CS113_Game
             sprite_Rect.X = character_Width * current_Sprite_Count;
 
             //if enough time has passed, move on to the next animation
-            if (time_Passed > time_Per_Animation)
+            if (time_Passed > time_Per_Animation && grounded)
             {
                 current_Sprite_Count++;
                 time_Passed = 0;
             }
 
-            if (current_Sprite_Count > sprite_Count)
+            if (current_Sprite_Count > sprite_Count && grounded)
                 current_Sprite_Count = 0;
 
             if (position.X < 0)
@@ -182,13 +184,13 @@ namespace CS113_Game
             sprite_Rect.Y = spriteRectOffset;
             sprite_Rect.X = character_Width * current_Sprite_Count;
 
-            if (time_Passed > time_Per_Animation)
+            if (time_Passed > time_Per_Animation && grounded)
             {
                 current_Sprite_Count++;
                 time_Passed = 0;
             }
 
-            if (current_Sprite_Count > sprite_Count)
+            if (current_Sprite_Count > sprite_Count && grounded)
                 current_Sprite_Count = 0;
 
             return sprite_Rect;

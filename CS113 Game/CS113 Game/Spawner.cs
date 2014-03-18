@@ -26,7 +26,7 @@ namespace CS113_Game
         
 
         public Vector2 position;
-        public enum EnemyType { basic, segway, mummy, swagman, naziPlane, naziTank, bobaBooth, Sphinx, Robama, FireRex}
+        public enum EnemyType { basic, segway, mummy, swagman, naziPlane, naziTank, bobaBooth, Sphinx, Robama, FireRex, Frost}
         public EnemyType typeToSpawn;
         Game1 gameRef;
 
@@ -105,6 +105,9 @@ namespace CS113_Game
                         break;
                     case (EnemyType.FireRex):
                         enemy = new FireRexBoss(gameRef, this, this.position);
+                        break;
+                    case (EnemyType.Frost):
+                        enemy = new FrostBoss(gameRef, this, this.position);
                         break;
                     default: //we should never reach this, this is just so we can allow ourselves to add an enemy without getting an unassigned element error
                         enemy = new BasicSoldierEnemy(gameRef, this, this.position);

@@ -7,18 +7,24 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Audio;
 
 
 namespace CS113_Game
 {
     public class PrehistoricLevel : Level
     {
-        public PrehistoricLevel(Game1 game)
-            : base(game)
+        public PrehistoricLevel(Game1 game, String levelName)
+            : base(game, levelName)
         {
             gameRef = game;
 
             spriteBatch = new SpriteBatch(game.GraphicsDevice);
+
+            Game1.backgroundMusic.Stop();
+            Game1.backgroundMusic = Game1.content_Manager.Load<SoundEffect>("SoundEffects/BackgroundMusic/prehistoricEARTH").CreateInstance();
+            Game1.backgroundMusic.IsLooped = true;
+            Game1.backgroundMusic.Play();
 
             level_Texture = Game1.content_Manager.Load<Texture2D>("Backgrounds/Levels/PE_BG");
             ground_Texture = Game1.content_Manager.Load<Texture2D>("Sprites/Platforms/TestGround");

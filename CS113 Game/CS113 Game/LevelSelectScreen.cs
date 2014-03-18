@@ -78,20 +78,20 @@ namespace CS113_Game
             switch(selected_Level)
             {
                 case Levels.Egypt :
-                    Game1.addScreenToStack(new GameScreen(gameRef, new AncientEgyptLevel(gameRef)));
+                    Game1.addScreenToStack(new GameScreen(gameRef, new AncientEgyptLevel(gameRef, "ANCIENT EGYPT")));
                     break;
 
                 case Levels.Dino :
-                    Game1.addScreenToStack(new GameScreen(gameRef, new PrehistoricLevel(gameRef)));
+                    Game1.addScreenToStack(new GameScreen(gameRef, new PrehistoricLevel(gameRef, "PREHISTORIC EARTH")));
                     break;
                 case Levels.Space:
-                    Game1.addScreenToStack(new GameScreen(gameRef, new FutureEarth(gameRef)));
+                    Game1.addScreenToStack(new GameScreen(gameRef, new FutureEarth(gameRef, "FUTURE EARTH")));
                     break;
                 case Levels.WWII :
-                    Game1.addScreenToStack(new GameScreen(gameRef, new WWIILevel(gameRef)));
+                    Game1.addScreenToStack(new GameScreen(gameRef, new WWIILevel(gameRef, "NORMANDY")));
                     break;
                 case Levels.UCI :
-                    Game1.addScreenToStack(new GameScreen(gameRef, new UCILevel(gameRef)));
+                    Game1.addScreenToStack(new GameScreen(gameRef, new UCILevel(gameRef, "UC IRVINE")));
                     break;
             }
 

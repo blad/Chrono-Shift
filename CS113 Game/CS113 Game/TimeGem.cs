@@ -12,6 +12,7 @@ namespace CS113_Game
         {
             power = AbilityPower.NORMAL;
             power_Cost = 0;
+            gemName = "TIME";
         }
 
         public override void ApplyAbility(Character c)

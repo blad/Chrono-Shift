@@ -53,8 +53,13 @@ namespace CS113_Game
 
         private TextEditor.Word ammoTextOne;
         private TextEditor.Word ammoTextTwo;
+
+        public static TextEditor.Word player1Gem;
+        public static TextEditor.Word player2Gem;
         public static TextEditor.Word AmmoCountOne;
         public static TextEditor.Word AmmoCountTwo;
+
+        public static TextEditor.Word levelWord;
         
 
         public int HealthWidth
@@ -91,11 +96,20 @@ namespace CS113_Game
             gem_Wheel = Game1.content_Manager.Load<Texture2D>("Backgrounds/HUD/GemWheel");
             gem_Rect = new Rectangle((int)gemWheel_Position.X + gem_Wheel.Height/2, (int)gemWheel_Position.Y + gem_Wheel.Height/2, gem_Wheel.Width, gem_Wheel.Height);
 
+            player1Gem = Level.text_Editor.word("TIME", new Vector2(140, 100), 0.5f);
+            player2Gem = Level.text_Editor.word("TIME", new Vector2(910, 100), 0.5f);
 
-            ammoTextOne = Level.text_Editor.word("AMMO", new Vector2(100, 680), 0.3f);
-            ammoTextTwo = Level.text_Editor.word("AMMO", new Vector2(1000, 680), 0.3f);
+            ammoTextOne = Level.text_Editor.word("AMMO", new Vector2(100, 680), 0.5f);
+            ammoTextTwo = Level.text_Editor.word("AMMO", new Vector2(1000, 680), 0.5f);
             AmmoCountOne = Level.text_Editor.word(Level.player1.Weapon.Ammo.ToString(), new Vector2(100, 700), 0.5f);
             AmmoCountTwo = Level.text_Editor.word(Level.player2.Weapon.Ammo.ToString(), new Vector2(1000, 700), 0.5f);
+
+            float levelWordScale = 0.65f;
+
+            if (Level.levelName.Equals("PREHISTORIC EARTH"))
+                levelWordScale = 0.5f;
+
+            levelWord = Level.text_Editor.word(Level.levelName, new Vector2(Game1.screen_Width / 2 - 150, 50 ), levelWordScale);
         }
 
         //when we move across the game space, the hud needs to appear static relative to the camera
@@ -126,28 +140,31 @@ namespace CS113_Game
             Level.text_Editor.translateWord(ammoTextTwo, translation, 0);
             Level.text_Editor.translateWord(AmmoCountOne, translation, 0);
             Level.text_Editor.translateWord(AmmoCountTwo, translation, 0);
+            Level.text_Editor.translateWord(player1Gem, translation, 0);
+            Level.text_Editor.translateWord(player2Gem, translation, 0);
+            Level.text_Editor.translateWord(levelWord, translation, 0);
         }
 
-        public void shortenHealthBar(int health, int playerNumber)
+        public void shortenHealthBar(float health, int playerNumber)
         {
             if (health > 100)
                 health = 100;
 
             if (playerNumber == 1)
-                health_Bar_Rect_Player1.Width = health * 2;
+                health_Bar_Rect_Player1.Width = (int)health * 2;
             else
-                health_Bar_Rect_Player2.Width = health * 2;
+                health_Bar_Rect_Player2.Width = (int)health * 2;
         }
 
-        public void shortenPowerBar(int power, int playerNumber)
+        public void shortenPowerBar(float power, int playerNumber)
         {
             if (power > 100)
                 power = 100;
 
             if (playerNumber == 1)
-                power_Bar_Rect_Player1.Width = power * 2;
+                power_Bar_Rect_Player1.Width = (int)power * 2;
             else
-                power_Bar_Rect_Player2.Width = power * 2;
+                power_Bar_Rect_Player2.Width = (int)power * 2;
         }
 
         public void Draw(SpriteBatch spriteBatch)

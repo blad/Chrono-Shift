@@ -21,7 +21,6 @@ namespace CS113_Game
         protected int bullet_Speed;
         protected int max_Bullets_To_Draw = 75;
         protected int bulletsFired = 0;
-        protected float theta;
         protected float volume;
         protected bool hasTexture = true;
 
@@ -73,7 +72,7 @@ namespace CS113_Game
                 //create a new bullet with this weapon passed as its parent weapon
                 Bullet bullet;
 
-
+                //the gun will fire different bullets depending on the type we give it
                 switch (bulletType)
                 {
                     case (BulletType.RIFLE):
@@ -170,7 +169,9 @@ namespace CS113_Game
                     bulletsFired = 0;
                 }
 
-                if (source_Character.weaponEffect != Character.Effect.NORMAL && source_Character.weaponEffect != Character.Effect.SPEED)
+                if (source_Character.weaponEffect != Character.Effect.NORMAL 
+                    && source_Character.weaponEffect != Character.Effect.SPEED 
+                    && source_Character.weaponEffect != Character.Effect.ARMOR)
                 {
                     source_Character.changePower(-source_Character.CurrentGem.Cost);
                 }
@@ -261,6 +262,7 @@ namespace CS113_Game
             current_Time = gameTime;
 
             startPosition = position;// +(new Vector2((float)weapon_Texture.Width / 2 - 15, texture_Offset));
+            startPosition.X += textureXOffset;
             startPosition.Y += texture_Offset;            
 
             //find where the mouse is based on the gamespace and find the angle at which we are aiming
@@ -271,7 +273,7 @@ namespace CS113_Game
 
             
 
-            weapon_Rect.X = (int)position.X;
+            weapon_Rect.X = (int)position.X + textureXOffset;
             weapon_Rect.Y = (int)position.Y + texture_Offset;
 
             foreach (Bullet b in bullet_List)
@@ -338,7 +340,7 @@ namespace CS113_Game
             {
                 weapon_Rect.X += weapon_Texture.Width / 4;
 
-                spriteBatch.Draw(weapon_Texture, weapon_Rect, sprite_Rect, Color.White, weaponAngle,
+                spriteBatch.Draw(weapon_Texture, weapon_Rect, sprite_Rect, Color.White, weaponAngle, 
                                     new Vector2(sprite_Rect.Width / 2, sprite_Rect.Height / 2), SpriteEffects.None, 1.0f);
             }
 

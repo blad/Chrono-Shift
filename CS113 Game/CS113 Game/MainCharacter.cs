@@ -18,7 +18,7 @@ namespace CS113_Game
             character_Texture = characterTexture;
             this.position = position;
 
-            equipped_Weapon = new Shotgun(game, this, false, this.position);
+            equipped_Weapon = new Pistol(game, this, false, this.position);
             has_Weapon = true;
 
             if (characterNumber == 1)

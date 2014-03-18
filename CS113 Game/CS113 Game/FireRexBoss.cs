@@ -17,7 +17,7 @@ namespace CS113_Game
 
             base_Speed = 2;
             Speed = 2;
-            health = 20;
+            health = 100;
             character_Texture = Game1.content_Manager.Load<Texture2D>("Sprites/Characters/FireRex");
 
             facing = direction.left;

@@ -17,7 +17,7 @@ namespace CS113_Game
 
             base_Speed = 1;
             Speed = 1;
-            health = 1000;
+            health = 100;
             character_Texture = Game1.content_Manager.Load<Texture2D>("Sprites/Characters/sphinx-sprite");
             spriteRectOffset = character_Texture.Height / 2;
 
@@ -66,6 +66,22 @@ namespace CS113_Game
                 {
                     moveLeft();
                 }
+            }
+
+            if (health <= 0)
+            {
+                bool AddGem = true;
+
+                foreach (Gem gem in LevelSelectScreen.characterGems)
+                {
+                    if (gem.Power == Gem.AbilityPower.SPEED)
+                        AddGem = false;
+                }
+
+                if (AddGem)
+                    LevelSelectScreen.characterGems.AddLast(new SpeedGem());
+
+                Game1.popScreenStack();
             }
         }
 

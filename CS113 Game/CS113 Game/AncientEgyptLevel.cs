@@ -13,8 +13,8 @@ namespace CS113_Game
 {
     public class AncientEgyptLevel : Level
     {
-        public AncientEgyptLevel(Game1 game)
-            : base(game)
+        public AncientEgyptLevel(Game1 game, String levelName)
+            : base(game, levelName)
         {
             gameRef = game;
 
@@ -22,6 +22,7 @@ namespace CS113_Game
 
             Game1.backgroundMusic.Stop();
             Game1.backgroundMusic = Game1.content_Manager.Load<SoundEffect>("SoundEffects/BackgroundMusic/Ancient_Egypt_BGM").CreateInstance();
+            Game1.backgroundMusic.IsLooped = true;
             Game1.backgroundMusic.Play();
 
             level_Texture = Game1.content_Manager.Load<Texture2D>("Backgrounds/Levels/AE_bg_01");
@@ -61,7 +62,7 @@ namespace CS113_Game
             spawners.Add(spawner_3);
             //end of spawners
 
-            text_Editor.word("ANCIENT EGYPT!", new Vector2(350, 200), 0.5f);
+            levelName = "ANCIENT EGYPT";
         }
     }
 }

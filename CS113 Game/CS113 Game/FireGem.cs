@@ -12,6 +12,7 @@ namespace CS113_Game
         {
             power = AbilityPower.FIRE;
             power_Cost = 2;
+            gemName = "FIRE";
         }
 
         public override void ApplyAbility(Character c)

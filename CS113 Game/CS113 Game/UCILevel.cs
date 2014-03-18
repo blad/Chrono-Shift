@@ -6,17 +6,23 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Audio;
 
 namespace CS113_Game
 {
     public class UCILevel : Level
     {
-        public UCILevel(Game1 game)
-            : base(game)
+        public UCILevel(Game1 game, String levelName)
+            : base(game, levelName)
         {
             gameRef = game;
 
             spriteBatch = new SpriteBatch(game.GraphicsDevice);
+
+            Game1.backgroundMusic.Stop();
+            Game1.backgroundMusic = Game1.content_Manager.Load<SoundEffect>("SoundEffects/BackgroundMusic/notuci").CreateInstance();
+            Game1.backgroundMusic.IsLooped = true;
+            Game1.backgroundMusic.Play();
 
             level_Texture = Game1.content_Manager.Load<Texture2D>("Backgrounds/Levels/UCI_Panorama1");
             ground_Texture = Game1.content_Manager.Load<Texture2D>("Sprites/Platforms/TestGround");
@@ -43,6 +49,14 @@ namespace CS113_Game
             Spawner spawner_2 = new Spawner(gameRef, new Vector2(1750.0f, 300.0f), Spawner.EnemyType.bobaBooth);
             spawner_2.Max_Enemies = 1;
             spawners.Add(spawner_2);
+
+            Spawner spawner_3 = new Spawner(gameRef, new Vector2(1050.0f, 300.0f), Spawner.EnemyType.bobaBooth);
+            spawner_3.Max_Enemies = 1;
+            spawners.Add(spawner_3);
+
+            Spawner spawner_4 = new Spawner(gameRef, new Vector2(3500.0f, 300.0f), Spawner.EnemyType.Frost);
+            spawner_4.Max_Enemies = 1;
+            spawners.Add(spawner_4);
         }
     }
 }

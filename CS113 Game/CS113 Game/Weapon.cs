@@ -21,9 +21,12 @@ namespace CS113_Game
         protected int left_Sprite_Position;
         protected int attack_Speed;
         protected int time_Passed;
-        protected int texture_Offset;
+
+        public int textureXOffset = 0;
+        public int texture_Offset;
 
         protected bool player_Target;
+        public float theta;
 
         public enum FireType { Auto, SingleShot };
         public FireType fireType;

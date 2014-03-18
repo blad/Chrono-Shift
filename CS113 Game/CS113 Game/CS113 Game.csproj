@@ -107,11 +107,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArmorGem.cs" />
     <Compile Include="BobaBoothEnemy.cs" />
     <Compile Include="BobbaBubble.cs" />
     <Compile Include="BossLaserBullet.cs" />
     <Compile Include="EmptyGun.cs" />
     <Compile Include="FireGem.cs" />
+    <Compile Include="FreezeGem.cs" />
+    <Compile Include="FrostBoss.cs" />
     <Compile Include="FutureEarth.cs" />
     <Compile Include="Gem.cs" />
     <Compile Include="AncientEgyptLevel.cs" />
@@ -153,6 +156,7 @@
     <Compile Include="SegwayEnemy.cs" />
     <Compile Include="Shotgun.cs" />
     <Compile Include="Spawner.cs" />
+    <Compile Include="SpeedGem.cs" />
     <Compile Include="SphinxBoss.cs" />
     <Compile Include="StartScreen.cs" />
     <Compile Include="SwagmanEnemy.cs" />

@@ -7,18 +7,24 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Audio;
 
 
 namespace CS113_Game
 {
     public class FutureEarth : Level
     {
-        public FutureEarth(Game1 game)
-            : base(game)
+        public FutureEarth(Game1 game, String levelName)
+            : base(game, levelName)
         {
             gameRef = game;
 
             spriteBatch = new SpriteBatch(game.GraphicsDevice);
+
+            Game1.backgroundMusic.Stop();
+            Game1.backgroundMusic = Game1.content_Manager.Load<SoundEffect>("SoundEffects/BackgroundMusic/futureEARTH").CreateInstance();
+            Game1.backgroundMusic.IsLooped = true;
+            Game1.backgroundMusic.Play();
 
             level_Texture = Game1.content_Manager.Load<Texture2D>("Backgrounds/Levels/space_background");
             ground_Texture = Game1.content_Manager.Load<Texture2D>("Sprites/Platforms/TestGround");
@@ -29,7 +35,7 @@ namespace CS113_Game
             ground_Rect = new Rectangle(0, Game1.screen_Height - ground_Texture.Height - 50,
                                             ground_Texture.Width * 2, ground_Texture.Height);
 
-            platform_Texture = Game1.content_Manager.Load<Texture2D>("Sprites/Platforms/wood_log_platform");
+            platform_Texture = Game1.content_Manager.Load<Texture2D>("Sprites/Platforms/SpacePlatform");
 
             platformList.Add(new Rectangle(100, 600, platform_Texture.Width, platform_Texture.Height));
             platformList.Add(new Rectangle(500, 400, platform_Texture.Width, platform_Texture.Height));

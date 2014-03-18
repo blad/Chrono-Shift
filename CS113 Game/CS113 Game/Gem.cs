@@ -12,12 +12,13 @@ namespace CS113_Game
     public abstract class Gem
     {
         protected Character character;
-        public enum AbilityPower{ NORMAL, FIRE, ICE, SPEED}
+        public enum AbilityPower{ NORMAL, ARMOR, DAMAGE, FIRE, ICE, SPEED}
+        public String gemName;
         protected AbilityPower power;
         protected Color ability_Color;
-        protected int power_Cost;
+        protected float power_Cost;
 
-        public int Cost
+        public float Cost
         {
             get { return power_Cost; }
         }
