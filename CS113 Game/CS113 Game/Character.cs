@@ -27,6 +27,7 @@ namespace CS113_Game
         protected int base_Jump_Speed = 20;
         protected int jump_Speed = 0;
         protected int texture_Offset;
+        protected int spriteRectOffset;
         protected int power = 100;
 
         protected bool has_Weapon = false;
@@ -178,7 +179,7 @@ namespace CS113_Game
             position.X = position.X + movement_Speed;
             facing = direction.right;
 
-            sprite_Rect.Y = character_Height;
+            sprite_Rect.Y = spriteRectOffset;
             sprite_Rect.X = character_Width * current_Sprite_Count;
 
             if (time_Passed > time_Per_Animation)

@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BobaBoothEnemy.cs" />
+    <Compile Include="BobbaBubble.cs" />
     <Compile Include="FireGem.cs" />
     <Compile Include="Gem.cs" />
     <Compile Include="AncientEgyptLevel.cs" />

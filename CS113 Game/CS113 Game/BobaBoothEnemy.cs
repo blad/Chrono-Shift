@@ -21,6 +21,7 @@ namespace CS113_Game
             Speed = 0;
             health = 100;
             character_Texture = Game1.content_Manager.Load<Texture2D>("Sprites/Characters/bobabooth_spritesheet");
+            spriteRectOffset = character_Texture.Height / 2;
 
             facing = direction.left;
 
@@ -29,6 +30,7 @@ namespace CS113_Game
             sprite_Count = 1;
             current_Sprite_Count = 0;
             time_Per_Animation = 250; //every 250 ms we change animation
+            attack_Time = 4000;
             time_Passed = 0;
 
             origin = Vector2.Zero;
@@ -40,11 +42,13 @@ namespace CS113_Game
             has_Weapon = false;
         }
 
-        //this is the basic soldier attack
-        //the soldier will fire 3 shots
+        
         public override void Attack()
         {
-            equipped_Weapon.fire(character_To_Attack);
+            BobbaBubble bubble = new BobbaBubble(gameRef, new Vector2((float)character_Rect.Center.X, (float)character_Rect.Center.Y - 400));
+            Level.characterList.Add(bubble);
+            Level.enemyList.Add(bubble);
+            Level.bombList.Add(bubble);
         }
 
 

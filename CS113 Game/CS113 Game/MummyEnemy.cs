@@ -20,6 +20,7 @@ namespace CS113_Game
             Speed = 2;
             health = 60;
             character_Texture = Game1.content_Manager.Load<Texture2D>("Sprites/Characters/mummy-sprite");
+            spriteRectOffset = character_Texture.Height / 2;
 
             facing = direction.left;
 

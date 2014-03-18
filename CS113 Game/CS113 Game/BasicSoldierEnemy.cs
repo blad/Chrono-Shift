@@ -21,6 +21,7 @@ namespace CS113_Game
             Speed = 2;
             health = 30;
             character_Texture = Game1.content_Manager.Load<Texture2D>("Sprites/Characters/TestCharacter");
+            spriteRectOffset = character_Texture.Height / 2;
 
             facing = direction.left;
 

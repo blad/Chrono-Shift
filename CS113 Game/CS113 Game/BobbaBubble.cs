@@ -9,26 +9,27 @@ using Microsoft.Xna.Framework.Input;
 
 namespace CS113_Game
 {
-    public class SegwayEnemy : Enemy
+    public class BobbaBubble : Enemy
     {
-        public SegwayEnemy(Game1 game, Spawner spawner, Vector2 position)
-            : base(game, spawner)
+        private int Damage = 15;
+
+        public BobbaBubble(Game1 game, Vector2 position)
+            : base(game)
         {
             this.position = position;
 
             base_Speed = 6;
             Speed = 6;
-            health = 25;
-            character_Texture = Game1.content_Manager.Load<Texture2D>("Sprites/Characters/segway_enemy_sprite");
-            spriteRectOffset = character_Texture.Height / 2;
+            health = 10;
+            character_Texture = Game1.content_Manager.Load<Texture2D>("Sprites/Projectiles/boba_bubble_spritesheet");
 
             facing = direction.left;
 
-            character_Width = 190;
-            character_Height = 300;
-            sprite_Count = 2;
+            character_Width = 236;
+            character_Height = 136;
+            sprite_Count = 7;
             current_Sprite_Count = 0;
-            time_Per_Animation = 50; //every 90 ms we change animation
+            time_Per_Animation = 50; //every 250 ms we change animation
             time_Passed = 0;
 
             origin = Vector2.Zero;
@@ -37,11 +38,19 @@ namespace CS113_Game
             texture_Offset = character_Height;
 
             has_Weapon = false;
+            has_Gravity = false;
         }
 
         public override void Attack()
         {
-            
+            //throw new NotImplementedException();
+        }
+
+        public void Attack(PlayableCharacter c)
+        {
+            health = 0;
+            c.takeDamage(Damage);
+            Damage = 0;// this to make sure we don't get hit more than once because of delays
         }
 
         public override void AIroutine(GameTime gameTime)
@@ -49,12 +58,11 @@ namespace CS113_Game
             current_Attack_Time += current_Game_Time.ElapsedGameTime.Milliseconds;
             time_Passed += gameTime.ElapsedGameTime.Milliseconds;
 
-            if (current_Attack_Time >= attack_Time)
-            {
-                current_Attack_Time = 0;
-                Attack();
-            }
-
+            foreach (MainCharacter c in Level.playerList)
+                if (character_Rect.Intersects(c.getCharacterRect()))
+                {
+                    Attack(c);
+                }
 
             if (!attacking)
             {
@@ -66,8 +74,17 @@ namespace CS113_Game
                 {
                     moveLeft();
                 }
+
+
+                if (character_To_Attack.position.Y > position.Y)
+                {
+                    position.Y += 5;
+                }
+                else if (character_To_Attack.position.Y < position.Y)
+                {
+                    position.Y -= 5;
+                }
             }
         }
-
     }
 }

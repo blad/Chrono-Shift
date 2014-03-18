@@ -21,6 +21,7 @@ namespace CS113_Game
             Speed = 3;
             health = 150;
             character_Texture = Game1.content_Manager.Load<Texture2D>("Sprites/Characters/swagman_enemy");
+            spriteRectOffset = character_Texture.Height / 2;
 
             facing = direction.left;
 

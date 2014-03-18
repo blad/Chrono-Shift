@@ -19,6 +19,7 @@ namespace CS113_Game
             Speed = 1;
             health = 1000;
             character_Texture = Game1.content_Manager.Load<Texture2D>("Sprites/Characters/sphinx-sprite");
+            spriteRectOffset = character_Texture.Height / 2;
 
             facing = direction.left;
 

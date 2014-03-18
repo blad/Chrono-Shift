@@ -22,6 +22,7 @@ namespace CS113_Game
             Speed = 1;
             health = 450;
             character_Texture = Game1.content_Manager.Load<Texture2D>("Sprites/Characters/nazi_tank");
+            spriteRectOffset = character_Texture.Height / 2;
 
             facing = direction.left;
 

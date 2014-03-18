@@ -42,6 +42,16 @@ namespace CS113_Game
             : base(game)
         {
             DrawOrder = 450;
+
+            Random rand = new Random();
+            int r = rand.Next(1, 3);
+
+            foreach (MainCharacter c in Level.playerList)
+            {
+                if (c.characterNumber == r)
+                    character_To_Attack = c;
+            }
+            
         }
    
 

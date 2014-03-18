@@ -104,10 +104,10 @@ namespace CS113_Game
             //we need try/catch blocks just in case the list is empty and the game wants to crash (lame)
             try
             {
-                foreach (Bomb bomb in bombList)
+                foreach (Enemy enemy in bombList)
                 {
-                    if (bomb != null)
-                        bomb.Update(gameTime);
+                    if (enemy != null)
+                        enemy.Update(gameTime);
                 }
 
                 //update all the items in the level

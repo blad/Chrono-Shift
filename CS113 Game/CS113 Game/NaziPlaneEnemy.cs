@@ -22,6 +22,7 @@ namespace CS113_Game
             Speed = 8;
             health = 200;
             character_Texture = Game1.content_Manager.Load<Texture2D>("Sprites/Characters/nazi_plane");
+            spriteRectOffset = character_Texture.Height / 2;
 
             facing = direction.left;
 
