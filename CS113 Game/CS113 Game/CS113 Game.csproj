@@ -109,7 +109,10 @@
   <ItemGroup>
     <Compile Include="BobaBoothEnemy.cs" />
     <Compile Include="BobbaBubble.cs" />
+    <Compile Include="BossLaserBullet.cs" />
+    <Compile Include="EmptyGun.cs" />
     <Compile Include="FireGem.cs" />
+    <Compile Include="FutureEarth.cs" />
     <Compile Include="Gem.cs" />
     <Compile Include="AncientEgyptLevel.cs" />
     <Compile Include="AssaultBullet.cs" />
@@ -125,6 +128,8 @@
     <Compile Include="NaziTankEnemy.cs" />
     <Compile Include="Pistol.cs" />
     <Compile Include="PowerPack.cs" />
+    <Compile Include="Revolver.cs" />
+    <Compile Include="RevolverBullet.cs" />
     <Compile Include="RobamaBoss.cs" />
     <Compile Include="Bullet.cs" />
     <Compile Include="Button.cs" />
@@ -146,12 +151,14 @@
     <Compile Include="Game1.cs" />
     <Compile Include="Screen.cs" />
     <Compile Include="SegwayEnemy.cs" />
+    <Compile Include="Shotgun.cs" />
     <Compile Include="Spawner.cs" />
     <Compile Include="SphinxBoss.cs" />
     <Compile Include="StartScreen.cs" />
     <Compile Include="SwagmanEnemy.cs" />
     <Compile Include="TextEditor.cs" />
     <Compile Include="TimeGem.cs" />
+    <Compile Include="UCILevel.cs" />
     <Compile Include="Weapon.cs" />
     <Compile Include="WeaponPickup.cs" />
     <Compile Include="WWIILevel.cs" />

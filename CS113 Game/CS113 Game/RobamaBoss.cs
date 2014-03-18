@@ -33,16 +33,20 @@ namespace CS113_Game
 
             origin = Vector2.Zero;
             sprite_Rect = new Rectangle((int)origin.X, (int)origin.Y, character_Width, character_Height);
-            character_Rect = new Rectangle((int)position.X, (int)position.Y, character_Width/2, character_Height/2);
-            texture_Offset = character_Height/2;
+            character_Rect = new Rectangle((int)position.X, (int)position.Y, character_Width, character_Height);
+            texture_Offset = character_Height;
 
-            has_Weapon = false;
+            has_Weapon = true;
+
+            EmptyGun gun = new EmptyGun(gameRef, this, true, this.position);
+            gun.bulletType = Gun.BulletType.BOSSLASER;
+            equipped_Weapon = gun;
         }
 
 
         public override void Attack()
         {
-            //boss will do nothing for now
+            equipped_Weapon.fire(character_To_Attack);
         }
 
 

@@ -27,7 +27,9 @@ namespace CS113_Game
 
         private Button egyptButton;
         private Button prehistoricButton;
+        private Button FutureEarthButton;
         private Button WWIIButton;
+        private Button UCIButton;
 
         private int ButtonWidth = 145;
         private int ButtonHeight = 195;
@@ -55,8 +57,14 @@ namespace CS113_Game
             prehistoricButton = new Button(295, 440, ButtonWidth, ButtonHeight);
             buttons.AddLast(prehistoricButton);
 
+            FutureEarthButton = new Button(560, 95, ButtonWidth, ButtonHeight);
+            buttons.AddLast(FutureEarthButton);
+
             WWIIButton = new Button(745, 440, ButtonWidth, ButtonHeight);
             buttons.AddLast(WWIIButton);
+
+            UCIButton = new Button(1005, 95, ButtonWidth, ButtonHeight);
+            buttons.AddLast(UCIButton);
 
             arrowSelect = Game1.content_Manager.Load<Texture2D>("Sprites/Buttons/SelectArrow");
             arrowRect = new Rectangle(egyptButton.Rect.X + arrowX, egyptButton.Rect.Y - arrowY, arrowSelect.Width, arrowSelect.Height);
@@ -76,8 +84,14 @@ namespace CS113_Game
                 case Levels.Dino :
                     Game1.addScreenToStack(new GameScreen(gameRef, new PrehistoricLevel(gameRef)));
                     break;
+                case Levels.Space:
+                    Game1.addScreenToStack(new GameScreen(gameRef, new FutureEarth(gameRef)));
+                    break;
                 case Levels.WWII :
                     Game1.addScreenToStack(new GameScreen(gameRef, new WWIILevel(gameRef)));
+                    break;
+                case Levels.UCI :
+                    Game1.addScreenToStack(new GameScreen(gameRef, new UCILevel(gameRef)));
                     break;
             }
 
@@ -119,10 +133,19 @@ namespace CS113_Game
                 {
                     selected_Level = Levels.Dino;
                 }
+                else if (currentButton.Value == FutureEarthButton)
+                {
+                    selected_Level = Levels.Space;
+                }
                 else if (currentButton.Value == WWIIButton)
                 {
                     selected_Level = Levels.WWII;
                 }
+                else if (currentButton.Value == UCIButton)
+                {
+                    selected_Level = Levels.UCI;
+                }
+
 
                 loadLevel();
             }

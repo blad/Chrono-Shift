@@ -70,14 +70,16 @@ namespace CS113_Game
 
                 Random rng = new Random();
 
-                int random = rng.Next(500);
+                int random = rng.Next(850);
 
                 if (random < 75) //we have a 15% chance of dropping a health pack
-                    Level.itemList.Add(new HealthPack(gameRef, this.position));
-                else if (random >= 75 && random < 200)
-                    Level.itemList.Add(new WeaponPickup(gameRef, this.position, random));
-                else if (random >= 200 && random <= 500)
-                    Level.itemList.Add(new PowerPack(gameRef, this.position));
+                    Level.itemList.Add(new HealthPack(gameRef, new Vector2(this.character_Rect.Center.X, this.character_Rect.Center.Y)));
+                
+                else if (random >= 75 && random < 150)
+                    Level.itemList.Add(new PowerPack(gameRef, new Vector2(this.character_Rect.Center.X, this.character_Rect.Center.Y)));
+
+                else if (random >= 150 && random < 500)
+                    Level.itemList.Add(new WeaponPickup(gameRef, new Vector2(this.character_Rect.Center.X, this.character_Rect.Center.Y), random));
             }
 
             previous_Game_Time = current_Game_Time;

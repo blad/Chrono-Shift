@@ -12,6 +12,7 @@ namespace CS113_Game
 {
     public class LaserGun : Gun
     {
+
         public LaserGun(Game1 game, Character character, bool target, Vector2 position)
             : base(game, character, target, position)
         {
@@ -30,8 +31,9 @@ namespace CS113_Game
 
             DrawOrder = 500;
 
-            ammo = 25;
+            ammo = 50;
             this.bulletType = BulletType.LASER;
         }
+
     }
 }

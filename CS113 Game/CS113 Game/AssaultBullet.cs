@@ -33,6 +33,12 @@ namespace CS113_Game
             this.damage = 4;
         }
 
+        public override void onCollisionEffect(PlayableCharacter c)
+        {
+            c.takeDamage(damage);
+            source_Weapon.getBullets()[list_Position] = null;
+        }
+
         public override void onCollisionEffect(Enemy enemy)
         {
             enemy.takeDamage(damage);

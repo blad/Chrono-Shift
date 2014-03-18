@@ -11,6 +11,7 @@ namespace CS113_Game
     public class LaserBullet : Bullet
     {
         Enemy lastEnemyHit;
+        PlayableCharacter lastPlayerHit;
 
         public LaserBullet(Game game, Gun source_Weapon, bool target, Vector2 position,
                         Vector2 direction, float theta, bool inversion,
@@ -33,6 +34,25 @@ namespace CS113_Game
 
             this.bullet_Rect = new Rectangle((int)position.X, (int)position.Y, bullet_Texture.Width / 2, bullet_Texture.Height);
             this.damage = 10;
+        }
+
+        public override void onCollisionEffect(PlayableCharacter c)
+        {
+            if (lastEnemyHit == null)
+            {
+                c.takeDamage(damage);
+                c.applyEffectDamage(bullet_Effect);
+                lastPlayerHit = c;
+            }
+            else
+            {
+                if (!c.Equals(lastEnemyHit))
+                {
+                    c.takeDamage(damage);
+                    c.applyEffectDamage(bullet_Effect);
+                    lastPlayerHit = c;
+                }
+            }
         }
 
         public override void onCollisionEffect(Enemy enemy)

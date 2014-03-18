@@ -23,9 +23,10 @@ namespace CS113_Game
         protected int bulletsFired = 0;
         protected float theta;
         protected float volume;
+        protected bool hasTexture = true;
 
-        protected enum BulletType { RIFLE, PISTOL, LASER }
-        protected BulletType bulletType;
+        public enum BulletType { RIFLE, PISTOL, LASER, SCATTER, REVOLVER, BOSSLASER }
+        public BulletType bulletType;
 
         Game1 gameRef;
 
@@ -87,6 +88,72 @@ namespace CS113_Game
                                              theta, invert, bulletsFired, source_Character.weaponEffect);
                         break;
 
+                    case (BulletType.SCATTER):
+                        
+                        //create a bunch of bullets for the shotgun
+                        Bullet bullet1 = new AssaultBullet(gameRef, this, player_Target, startPosition,
+                                             new Vector2(xSpeed, ySpeed + 1),
+                                             theta + .25f, invert, bulletsFired, source_Character.weaponEffect);
+
+                        bullet_List[bulletsFired] = bullet1;
+                        bulletsFired++;
+
+                        if (bulletsFired >= max_Bullets_To_Draw)
+                        {
+                            bulletsFired = 0;
+                        }
+
+                        Bullet bullet2 = new AssaultBullet(gameRef, this, player_Target, startPosition,
+                                             new Vector2(xSpeed, ySpeed - 1),
+                                             theta - .25f, invert, bulletsFired, source_Character.weaponEffect);
+
+                        bullet_List[bulletsFired] = bullet2;
+                        bulletsFired++;
+
+                        if (bulletsFired >= max_Bullets_To_Draw)
+                        {
+                            bulletsFired = 0;
+                        }
+
+                        Bullet bullet3 = new AssaultBullet(gameRef, this, player_Target, startPosition,
+                                             new Vector2(xSpeed, ySpeed + 2),
+                                             theta + .5f, invert, bulletsFired, source_Character.weaponEffect);
+
+                        bullet_List[bulletsFired] = bullet3;
+                        bulletsFired++;
+
+                        if (bulletsFired >= max_Bullets_To_Draw)
+                        {
+                            bulletsFired = 0;
+                        }
+
+                        Bullet bullet4 = new AssaultBullet(gameRef, this, player_Target, startPosition,
+                                             new Vector2(xSpeed, ySpeed - 2),
+                                             theta - .5f, invert, bulletsFired, source_Character.weaponEffect);
+
+                        bullet_List[bulletsFired] = bullet4;
+                        bulletsFired++;
+
+                        if (bulletsFired >= max_Bullets_To_Draw)
+                        {
+                            bulletsFired = 0;
+                        }
+
+                        bullet = new AssaultBullet(gameRef, this, player_Target, startPosition,
+                                             new Vector2(xSpeed, ySpeed),
+                                             theta, invert, bulletsFired, source_Character.weaponEffect);
+                        
+                        break;
+
+                        //end of shotgun bullets
+
+
+                    case (BulletType.REVOLVER):
+                        bullet = new RevolverBullet(gameRef, this, player_Target, startPosition,
+                                             new Vector2(xSpeed, ySpeed),
+                                             theta, invert, bulletsFired, source_Character.weaponEffect);
+                        break;
+
                     default:
                         bullet = new AssaultBullet(gameRef, this, player_Target, startPosition,
                                             new Vector2(xSpeed, ySpeed),
@@ -103,7 +170,7 @@ namespace CS113_Game
                     bulletsFired = 0;
                 }
 
-                if (source_Character.weaponEffect != Character.Effect.NORMAL)
+                if (source_Character.weaponEffect != Character.Effect.NORMAL && source_Character.weaponEffect != Character.Effect.SPEED)
                 {
                     source_Character.changePower(-source_Character.CurrentGem.Cost);
                 }
@@ -156,6 +223,12 @@ namespace CS113_Game
 
                     case (BulletType.LASER):
                         bullet = new LaserBullet(gameRef, this, player_Target, startPosition,
+                                             new Vector2(xSpeed, ySpeed),
+                                             theta, invert, bulletsFired, source_Character.weaponEffect);
+                        break;
+
+                    case (BulletType.BOSSLASER):
+                        bullet = new BossLaserBullet(gameRef, this, player_Target, startPosition,
                                              new Vector2(xSpeed, ySpeed),
                                              theta, invert, bulletsFired, source_Character.weaponEffect);
                         break;
@@ -260,10 +333,14 @@ namespace CS113_Game
                 sprite_Rect.X = 0;
             }
 
-            weapon_Rect.X += weapon_Texture.Width/4;
 
-            spriteBatch.Draw(weapon_Texture, weapon_Rect, sprite_Rect, Color.White, weaponAngle, 
-                                new Vector2(sprite_Rect.Width/2, sprite_Rect.Height/2), SpriteEffects.None, 1.0f);
+            if (hasTexture)
+            {
+                weapon_Rect.X += weapon_Texture.Width / 4;
+
+                spriteBatch.Draw(weapon_Texture, weapon_Rect, sprite_Rect, Color.White, weaponAngle,
+                                    new Vector2(sprite_Rect.Width / 2, sprite_Rect.Height / 2), SpriteEffects.None, 1.0f);
+            }
 
             foreach (Bullet b in bullet_List)
             {

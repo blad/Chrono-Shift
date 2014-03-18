@@ -130,8 +130,7 @@ namespace CS113_Game
                 {
                     if (bullet_Rect.Intersects(c.getCharacterRect()))
                     {
-                        c.takeDamage(damage);
-                        source_Weapon.getBullets()[list_Position] = null;
+                        onCollisionEffect(c);
                     }
                 }
             }
@@ -143,6 +142,7 @@ namespace CS113_Game
         }
 
         public abstract void onCollisionEffect(Enemy enemy);
+        public abstract void onCollisionEffect(PlayableCharacter c);
           
     }
 }

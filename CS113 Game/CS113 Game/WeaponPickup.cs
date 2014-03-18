@@ -19,11 +19,17 @@ namespace CS113_Game
             this.position = position;
             this.selectWeapon = selectWeapon;
 
-            if (selectWeapon >= 75 && selectWeapon <= 100)
+            if (selectWeapon >= 150 && selectWeapon < 200)
                 item_Texture = Game1.content_Manager.Load<Texture2D>("Sprites/Pickups/Assault_Drop");
 
-            else if (selectWeapon > 100 && selectWeapon <= 200)
+            else if (selectWeapon >= 200 && selectWeapon < 250)
                 item_Texture = Game1.content_Manager.Load<Texture2D>("Sprites/Pickups/Laser_Drop");
+
+            else if (selectWeapon >= 250 && selectWeapon < 350)
+                item_Texture = Game1.content_Manager.Load<Texture2D>("Sprites/Pickups/Revolver_Drop");
+
+            else if (selectWeapon >= 350 && selectWeapon <= 500)
+                item_Texture = Game1.content_Manager.Load<Texture2D>("Sprites/Pickups/Shotgun_Drop");
 
             else
                 item_Texture = Game1.content_Manager.Load<Texture2D>("Sprites/Pickups/Assault_Drop");
@@ -37,10 +43,18 @@ namespace CS113_Game
         {
             Weapon weapon;
 
-            if (selectWeapon >= 75 && selectWeapon <= 100)
+            if (selectWeapon >= 150 && selectWeapon < 200)
                 weapon = new AssaultRifle(gameRef, character, false, character.position);
-            else if (selectWeapon > 100 && selectWeapon <= 200)
+
+            else if (selectWeapon >= 200 && selectWeapon < 250)
                 weapon = new LaserGun(gameRef, character, false, character.position);
+
+            else if (selectWeapon >= 250 && selectWeapon <= 350)
+                weapon = new Revolver(gameRef, character, false, character.position);
+
+            else if (selectWeapon >= 350 && selectWeapon <= 500)
+                weapon = new Shotgun(gameRef, character, false, character.position);
+
             else
                 weapon = new AssaultRifle(gameRef, character, false, character.position);
 
