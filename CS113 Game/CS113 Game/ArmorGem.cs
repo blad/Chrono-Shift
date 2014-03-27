@@ -11,7 +11,7 @@ namespace CS113_Game
             : base()
         {
             power = AbilityPower.ARMOR;
-            power_Cost = 2;
+            power_Cost = 5;
             gemName = "ARMOR";
         }
 

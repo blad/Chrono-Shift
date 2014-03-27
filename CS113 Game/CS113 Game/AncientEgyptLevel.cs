@@ -44,11 +44,12 @@ namespace CS113_Game
             platformList.Add(new Rectangle(400, 600, platform_Texture.Width, platform_Texture.Height));
             platformList.Add(new Rectangle(800, 400, platform_Texture.Width, platform_Texture.Height));
             platformList.Add(new Rectangle(1800, 400, platform_Texture.Width, platform_Texture.Height));
+            platformList.Add(new Rectangle(1200, 600, platform_Texture.Width, platform_Texture.Height));
             //end of platforms
 
 
             //spawners
-            Spawner spawner_1 = new Spawner(gameRef, new Vector2(1000.0f, 250.0f), Spawner.EnemyType.swagman);
+            Spawner spawner_1 = new Spawner(gameRef, new Vector2(1000.0f, 250.0f), Spawner.EnemyType.mummy);
             spawners.Add(spawner_1);
 
             Spawner spawner_4 = new Spawner(gameRef, new Vector2(1100.0f, 600.0f), Spawner.EnemyType.mummy);

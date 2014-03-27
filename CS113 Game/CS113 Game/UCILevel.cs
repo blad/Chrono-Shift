@@ -43,11 +43,11 @@ namespace CS113_Game
             platformList.Add(new Rectangle(1800, 400, platform_Texture.Width, platform_Texture.Height));
 
             Spawner spawner_1 = new Spawner(gameRef, new Vector2(1750.0f, 300.0f), Spawner.EnemyType.swagman);
-            spawner_1.Max_Enemies = 4;
+            spawner_1.Max_Enemies = 3;
             spawners.Add(spawner_1);
 
-            Spawner spawner_2 = new Spawner(gameRef, new Vector2(1750.0f, 300.0f), Spawner.EnemyType.bobaBooth);
-            spawner_2.Max_Enemies = 1;
+            Spawner spawner_2 = new Spawner(gameRef, new Vector2(1750.0f, 300.0f), Spawner.EnemyType.bobacup);
+            spawner_2.Max_Enemies = 5;
             spawners.Add(spawner_2);
 
             Spawner spawner_3 = new Spawner(gameRef, new Vector2(1050.0f, 300.0f), Spawner.EnemyType.bobaBooth);

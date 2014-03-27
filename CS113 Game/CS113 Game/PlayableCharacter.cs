@@ -186,6 +186,12 @@ namespace CS113_Game
         //we need to adjust the health bar when a playable character is hit
         public void takeDamage(float damage)
         {
+            if (weaponEffect == Effect.ARMOR)
+            {
+                changePower(currentGem.Cost);
+                damage *= 0.5f;
+            }
+
             health = health - damage;
             Level.HUD.shortenHealthBar(health, this.characterNumber);
 

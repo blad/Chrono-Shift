@@ -26,7 +26,10 @@ namespace CS113_Game
         
 
         public Vector2 position;
-        public enum EnemyType { basic, segway, mummy, swagman, naziPlane, naziTank, bobaBooth, Sphinx, Robama, FireRex, Frost}
+        public enum EnemyType { android, basic, segway, mummy, swagman, 
+                                naziPlane, naziTank, bobacup, bobaBooth, 
+                                Sphinx, Robama, FireRex, Frost}
+
         public EnemyType typeToSpawn;
         Game1 gameRef;
 
@@ -76,6 +79,10 @@ namespace CS113_Game
 
                 switch (typeToSpawn)
                 {
+
+                    case (EnemyType.android):
+                        enemy = new AndroidEnemy(gameRef, this, this.position);
+                        break;
                     case (EnemyType.basic):
                         enemy = new BasicSoldierEnemy(gameRef, this, this.position);
                         break;
@@ -93,6 +100,9 @@ namespace CS113_Game
                         break;
                     case (EnemyType.bobaBooth):
                         enemy = new BobaBoothEnemy(gameRef, this, this.position);
+                        break;
+                    case (EnemyType.bobacup):
+                        enemy = new BobaCupEnemy(gameRef, this, this.position);
                         break;
                     case (EnemyType.Robama):
                         enemy = new RobamaBoss(gameRef, this, this.position);

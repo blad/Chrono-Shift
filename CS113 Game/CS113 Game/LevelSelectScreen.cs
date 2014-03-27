@@ -41,7 +41,7 @@ namespace CS113_Game
         public LevelSelectScreen(Game1 game)
         {
             gameRef = game;
-
+            Game1.backgroundMusic.Volume = 1.0f;
             characterGems.AddLast(new TimeGem());
 
             background = Game1.content_Manager.Load<Texture2D>("Backgrounds/Menus/stage_select_bg");

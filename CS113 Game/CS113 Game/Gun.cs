@@ -24,7 +24,7 @@ namespace CS113_Game
         protected float volume;
         protected bool hasTexture = true;
 
-        public enum BulletType { RIFLE, PISTOL, LASER, SCATTER, REVOLVER, BOSSLASER }
+        public enum BulletType { RIFLE, PISTOL, LASER, SCATTER, REVOLVER, BOBA, BOSSLASER }
         public BulletType bulletType;
 
         Game1 gameRef;
@@ -77,6 +77,12 @@ namespace CS113_Game
                 {
                     case (BulletType.RIFLE):
                         bullet = new AssaultBullet(gameRef, this, player_Target, startPosition,
+                                            new Vector2(xSpeed, ySpeed),
+                                            theta, invert, bulletsFired, source_Character.weaponEffect);
+                        break;
+
+                    case (BulletType.BOBA):
+                        bullet = new BobaBall(gameRef, this, player_Target, startPosition,
                                             new Vector2(xSpeed, ySpeed),
                                             theta, invert, bulletsFired, source_Character.weaponEffect);
                         break;
@@ -218,6 +224,12 @@ namespace CS113_Game
                 {
                     case (BulletType.RIFLE):
                         bullet = new AssaultBullet(gameRef, this, player_Target, startPosition,
+                                            new Vector2(xSpeed, ySpeed),
+                                            theta, invert, bulletsFired, source_Character.weaponEffect);
+                        break;
+
+                        case (BulletType.BOBA):
+                        bullet = new BobaBall(gameRef, this, player_Target, startPosition,
                                             new Vector2(xSpeed, ySpeed),
                                             theta, invert, bulletsFired, source_Character.weaponEffect);
                         break;

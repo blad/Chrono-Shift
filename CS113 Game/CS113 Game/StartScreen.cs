@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Input;
+using CS113_Game.VideoScreen;
 
 namespace CS113_Game
 {
@@ -34,7 +35,8 @@ namespace CS113_Game
         {
             if (handler.buttonPressed((Buttons.Start)))
             {
-                Game1.addScreenToStack(new LevelSelectScreen(gameRef));
+                Game1.addScreenToStack(new CutSceneMain(gameRef));
+                //Game1.addScreenToStack(new LevelSelectScreen(gameRef));
             }
         }
 

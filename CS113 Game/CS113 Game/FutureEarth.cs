@@ -43,6 +43,24 @@ namespace CS113_Game
             platformList.Add(new Rectangle(400, 600, platform_Texture.Width, platform_Texture.Height));
             platformList.Add(new Rectangle(800, 400, platform_Texture.Width, platform_Texture.Height));
             platformList.Add(new Rectangle(1800, 400, platform_Texture.Width, platform_Texture.Height));
+            platformList.Add(new Rectangle(1200, 600, platform_Texture.Width, platform_Texture.Height));
+
+            platformList.Add(new Rectangle(2500, 600, platform_Texture.Width, platform_Texture.Height));
+            platformList.Add(new Rectangle(2500, 400, platform_Texture.Width, platform_Texture.Height));
+            platformList.Add(new Rectangle(2500, 200, platform_Texture.Width, platform_Texture.Height));
+
+            Spawner spawner_3 = new Spawner(gameRef, new Vector2(1000.0f, 250.0f), Spawner.EnemyType.android);
+            spawner_3.Max_Enemies = 4;
+            spawners.Add(spawner_3);
+
+            Spawner spawner_4 = new Spawner(gameRef, new Vector2(1100.0f, 600.0f), Spawner.EnemyType.android);
+            spawner_4.Max_Enemies = 2;
+            spawners.Add(spawner_4);
+
+            Spawner spawner_2 = new Spawner(gameRef, new Vector2(2000.0f, 250.0f), Spawner.EnemyType.android);
+            spawner_2.Max_Enemies = 4;
+            spawners.Add(spawner_2);
+
 
             Spawner spawner_1 = new Spawner(gameRef, new Vector2(2750.0f, 300.0f), Spawner.EnemyType.Robama);
             spawner_1.Max_Enemies = 1;

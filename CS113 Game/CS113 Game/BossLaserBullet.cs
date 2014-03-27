@@ -32,7 +32,7 @@ namespace CS113_Game
             }
 
             this.bullet_Rect = new Rectangle((int)position.X, (int)position.Y, bullet_Texture.Width, bullet_Texture.Height*2);
-            this.damage = 20;
+            this.damage = 14;
         }
 
         public override void onCollisionEffect(PlayableCharacter c)

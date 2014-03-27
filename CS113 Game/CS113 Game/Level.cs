@@ -95,8 +95,13 @@ namespace CS113_Game
             reticle_Rect.X = screen_Offset + mousePosition.X - reticle.Width/2;
             reticle_Rect.Y = mousePosition.Y - reticle.Height/2;
 
-            foreach(MainCharacter current_Character in playerList)
-                current_Character.Update(gameTime);
+            foreach (MainCharacter current_Character in playerList)
+            {
+                if (current_Character.health > 0)
+                    current_Character.Update(gameTime);
+                
+               
+            }
             
             //update all the spawners
             foreach (Spawner spawner in spawners)
@@ -171,6 +176,9 @@ namespace CS113_Game
                 screen_Offset -= player1.getSpeed();
                 HUD.translateHUD(-player1.getSpeed());
             }
+
+            if (player1.health <= 0 && player2.health <= 0)
+                Game1.popScreenStack();
         }
 
         public override void Draw(GameTime gameTime)
@@ -197,7 +205,8 @@ namespace CS113_Game
             }
 
             foreach (MainCharacter current_Character in playerList)
-                current_Character.Draw(gameTime, spriteBatch);
+                if (current_Character.health > 0)
+                    current_Character.Draw(gameTime, spriteBatch);
 
             try
             {

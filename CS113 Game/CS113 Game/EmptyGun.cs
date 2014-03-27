@@ -25,7 +25,7 @@ namespace CS113_Game
 
             attack_Speed = 200;
             bullet_Speed = 40;
-            fireType = FireType.Auto;
+            fireType = FireType.SingleShot;
 
             DrawOrder = 500;
 

@@ -38,7 +38,7 @@ namespace CS113_Game
 
         public override void onCollisionEffect(PlayableCharacter c)
         {
-            if (lastEnemyHit == null)
+            if (lastPlayerHit == null)
             {
                 c.takeDamage(damage);
                 c.applyEffectDamage(bullet_Effect);
@@ -46,7 +46,7 @@ namespace CS113_Game
             }
             else
             {
-                if (!c.Equals(lastEnemyHit))
+                if (!c.Equals(lastPlayerHit))
                 {
                     c.takeDamage(damage);
                     c.applyEffectDamage(bullet_Effect);

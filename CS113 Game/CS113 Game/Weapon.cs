@@ -19,7 +19,7 @@ namespace CS113_Game
         protected SoundEffect weapon_Sound;
         protected int ammo;
         protected int left_Sprite_Position;
-        protected int attack_Speed;
+        public int attack_Speed;
         protected int time_Passed;
 
         public int textureXOffset = 0;

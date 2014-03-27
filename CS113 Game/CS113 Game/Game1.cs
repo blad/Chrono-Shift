@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using CS113_Game.VideoScreen;
 
 namespace CS113_Game
 {
@@ -78,8 +79,11 @@ namespace CS113_Game
 
             backgroundMusic = content_Manager.Load<SoundEffect>("SoundEffects/BackgroundMusic/Level_Select_BGM").CreateInstance();;
             backgroundMusic.IsLooped = true;
+            backgroundMusic.Volume = 1.0f;
             backgroundMusic.Play();
 
+
+            //addScreenToStack(new CutSceneMain(this));
             addScreenToStack(new StartScreen(this));
 
         }
@@ -128,7 +132,6 @@ namespace CS113_Game
                 else
                     popScreenStack();
             }
-
 
             current_Screen.Update(gameTime, input_Handler_Player1);
 
